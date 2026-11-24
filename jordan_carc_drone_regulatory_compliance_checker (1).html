@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jordan CARC Drone Regulatory Compliance Checker | هيئة تنظيم الطيران المدني</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Noto Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans Arabic', 'sans-serif'],
+            arabic: ['Noto Sans Arabic', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              950: '#071124',
+              900: '#0B192C',
+              800: '#132744',
+              700: '#1E3A5F',
+              600: '#2A4F7E',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+    .arabic-font {
+      font-family: 'Noto Sans Arabic', sans-serif;
+    }
+    .step-transition {
+      animation: fadeSlide 0.28s ease-out forwards;
+    }
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* Custom scrollbar for reference drawer */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background-color: #ffffff !important;
+      }
+      .print-shadow-none {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-amber-200 selection:text-navy-950">
+
+  <!-- Official CARC Top Header -->
+  <header class="bg-navy-950 text-white border-b-4 border-amber-500 shadow-lg sticky top-0 z-30 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <!-- Brand / Authority Identity -->
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-md shrink-0 text-navy-950">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+              <path d="M4.93 4.93l4.24 4.24" />
+              <path d="M14.83 14.83l4.24 4.24" />
+              <path d="M14.83 9.17l4.24 -4.24" />
+              <path d="M4.93 19.07l4.24 -4.24" />
+              <circle cx="5" cy="5" r="3" />
+              <circle cx="19" cy="5" r="3" />
+              <circle cx="5" cy="19" r="3" />
+              <circle cx="19" cy="19" r="3" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30" data-i18n="badgeAuthority">
+                Hashemite Kingdom of Jordan • CARC
+              </span>
+              <span class="text-xs text-slate-400 hidden sm:inline" data-i18n="lawRef">
+                Law No. 41 of 2007 (Art. 12/J)
+              </span>
+            </div>
+            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white mt-0.5" data-i18n="appTitle">
+              Drone Regulatory Compliance Checker (2025 Instructions)
+            </h1>
+            <p class="text-xs text-slate-300 arabic-font" data-i18n="appSubtitle">
+              التعليمات الخاصة بالطائرات المسيرة لسنة 2025 — هيئة تنظيم الطيران المدني
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Controls: Language Toggle & Reference Drawer -->
+        <div class="flex items-center gap-2.5 self-start md:self-center">
+          <button id="btnToggleRef" onclick="toggleReferenceDrawer()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-slate-100 text-xs sm:text-sm font-medium border border-navy-600 transition cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+            </svg>
+            <span data-i18n="btnQuickRef">2025 Instructions (Art. 1–13)</span>
+          </button>
+
+          <button id="btnToggleLang" onclick="toggleLanguage()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs sm:text-sm font-bold shadow-sm transition cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            <span id="langLabel">العربية</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    
+    <!-- Top Progress & Live Status Bar -->
+    <div id="wizardHeaderBar" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-5 mb-6 no-print">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-navy-700" id="stepCounterLabel">Step 1 of 5</span>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900" id="stepMainHeading">Applicant Profile & Entity Eligibility</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-medium text-slate-500" data-i18n="liveStatusTitle">Live Pre-Check:</span>
+          <span id="liveStatusBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+            <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+            <span data-i18n="statusInProgress">Assessment in Progress</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Stepper Pills -->
+      <div class="grid grid-cols-5 gap-2" id="stepperGrid">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </div>
+
+    <!-- Grid Layout: Wizard Content + Live Regulatory Sidebar -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Left / Main Interactive Wizard & Report Area (8 cols on lg) -->
+      <div class="lg:col-span-8 space-y-6">
+        <div id="wizardContainer" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-8 step-transition print-shadow-none">
+          <!-- Dynamic Step / Final Assessment Report injected here -->
+        </div>
+
+        <!-- Navigation Controls -->
+        <div id="wizardNavFooter" class="flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl shadow-sm border border-slate-200 px-5 py-4 no-print">
+          <button id="btnPrev" onclick="prevStep()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold text-sm transition disabled:opacity-40 disabled:pointer-events-none cursor-pointer">
+            <span id="prevArrow">←</span>
+            <span data-i18n="btnBack">Previous Step</span>
+          </button>
+
+          <div class="flex items-center gap-2.5">
+            <button onclick="resetAssessment()" class="px-3.5 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 text-xs sm:text-sm font-medium transition cursor-pointer" data-i18n="btnReset">
+              Reset
+            </button>
+            <button id="btnNext" onclick="nextStep()" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-semibold text-sm shadow-sm transition cursor-pointer">
+              <span id="nextBtnText" data-i18n="btnNext">Next Step</span>
+              <span id="nextArrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Sidebar: Live Legal Context & Special Committee Info (4 cols on lg) -->
+      <aside class="lg:col-span-4 space-y-5 no-print">
+        <!-- Context Card for Current Step -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+          <div class="flex items-center gap-2.5 text-navy-900 font-bold text-sm mb-3 pb-2.5 border-b border-slate-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <span data-i18n="sidebarLegalTitle">Applicable Legal Provisions</span>
+          </div>
+          <div id="stepLegalContext" class="text-xs sm:text-sm text-slate-600 space-y-3 leading-relaxed">
+            <!-- Dynamically updated per step -->
+          </div>
+        </div>
+
+        <!-- Special Committee Overview Card (Article 3) -->
+        <div class="bg-navy-900 text-white rounded-2xl shadow-sm p-5 border border-navy-800">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400" data-i18n="art3Badge">Article 3 • Special Committee</span>
+            <span class="text-[11px] bg-navy-800 text-slate-300 px-2 py-0.5 rounded-lg">11 Members</span>
+          </div>
+          <h3 class="font-bold text-sm sm:text-base mb-2" data-i18n="art3Title">Inter-Agency Drone Committee</h3>
+          <p class="text-xs text-slate-300 leading-relaxed mb-3" data-i18n="art3Desc">
+            Chaired by CARC Director of Aviation Security & Facilitation, comprising representatives from the Ministry of Interior, JAF (Military Security, Intelligence, Drone Directorate, Military Judiciary, Royal Jordanian Air Force), GID, PSD, Jordan Customs, and CARC Security Standards/Oversight.
+          </p>
+          <div class="text-[11px] text-amber-300/90 bg-navy-950/60 rounded-xl p-3 border border-navy-700/80" data-i18n="art3Note">
+            Meets at least monthly to review technical specs, operational purposes, transport/storage rules, and recommend licensing to the CARC Board President.
+          </div>
+        </div>
+
+        <!-- Critical Enforcement Alert Card (Articles 6, 7, 8) -->
+        <div class="bg-amber-50 rounded-2xl border border-amber-200 p-5">
+          <div class="flex items-center gap-2 text-amber-900 font-bold text-sm mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span data-i18n="enforcementTitle">Enforcement & Confiscation Rules</span>
+          </div>
+          <ul class="text-xs text-amber-900/90 space-y-2 list-disc list-inside leading-relaxed" id="enforcementList">
+            <li data-i18n="enf1"><strong>Art. 6/A:</strong> Unlicensed border imports or unauthorized individual/commercial flights inside Jordan are subject to immediate confiscation by Customs or Security Agencies.</li>
+            <li data-i18n="enf2"><strong>Art. 7:</strong> Licenses may be suspended or revoked for exceeding altitude/path/time limits or 6 consecutive months of inactivity without excuse.</li>
+            <li data-i18n="enf3"><strong>Art. 8:</strong> Commercial registry or license changes require prior CARC President approval.</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Slide-over Reference Drawer for Full 2025 Instructions (Articles 1–13) -->
+  <div id="referenceDrawer" class="fixed inset-0 z-50 hidden no-print" aria-hidden="true">
+    <div class="absolute inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity" onclick="toggleReferenceDrawer()"></div>
+    <div class="fixed inset-y-0 right-0 max-w-2xl w-full bg-white shadow-2xl flex flex-col border-l border-slate-200">
+      <div class="bg-navy-950 text-white px-6 py-4 flex items-center justify-between border-b border-navy-800">
+        <div>
+          <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider" data-i18n="drawerBadge">Official Regulatory Summary</span>
+          <h2 class="text-base sm:text-lg font-bold" data-i18n="drawerTitle">CARC Drone Instructions (2025) — Articles 1 to 13</h2>
+        </div>
+        <button onclick="toggleReferenceDrawer()" class="p-2 rounded-xl bg-navy-800 hover:bg-navy-700 text-slate-200 transition cursor-pointer" aria-label="Close">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+      <div id="drawerContent" class="flex-1 overflow-y-auto p-6 space-y-4 text-sm text-slate-700">
+        <!-- Populated dynamically with bilingual summaries of Articles 1-13 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Toast Notification Box (Replaces alert()) -->
+  <div id="toastBox" class="fixed bottom-5 right-5 z-50 hidden max-w-sm bg-navy-900 text-white px-4 py-3 rounded-xl shadow-xl border border-amber-500/40 text-xs sm:text-sm flex items-center gap-3">
+    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0"></span>
+    <span id="toastMessage"></span>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200 py-5 mt-10 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+      <p data-i18n="footerNote">
+        Based on Jordanian Civil Aviation Regulatory Commission (CARC) Instructions for Unmanned Aircraft (2025), issued pursuant to Article 12/J of Civil Aviation Law No. 41 of 2007.
+      </p>
+      <p class="font-medium text-slate-600" data-i18n="footerDisclaimer">
+        Advisory Compliance Tool • Official licensing requires formal CARC submission
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // 1. APPLICATION STATE & REGULATORY DATA MODEL
+    // =========================================================================
+    let currentLang = 'en'; // 'en' or 'ar'
+    let currentStep = 1;    // 1..5 = Wizard Steps, 6 = Final Assessment Report
+
+    const state = {
+      // Step 1: Applicant Profile & Entity Eligibility (Art. 2, 5/A/2/B, 6/D, 13)
+      isExemptEntity: null,          // 'yes' | 'no'
+      controlledAirspaceAck: null,   // 'yes' | 'no' (if exempt)
+      isTemporaryFilming: null,      // 'yes' | 'no' (Art. 6/D)
+      tempApprovalAndEscort: null,   // 'yes' | 'no' (if temporary filming)
+      isRegisteredCompany: null,     // 'yes' | 'no' (Art. 2: MIT registered company/establishment)
+      jordanianShareholdingOk: null, // 'yes' | 'no' (Art. 5/A/2/B: Investment Environment Law No. 21 of 2022)
+
+      // Step 2: Approved Operational Purpose (Art. 4/B/2)
+      selectedPurposes: [],          // Array of purpose IDs
+      rjgcApproval: null,            // 'yes' | 'no' (Conditional if 'mapping' is selected - Art. 4/B/2/A/5)
+      otherPurposeDesc: '',          // Conditional if 'other' is selected
+
+      // Step 3: Security Clearances & Personnel (Art. 4/A, 4/B/1, 5/A/1, 5/A/3, 5/A/4)
+      securityClearancesAll4: null,  // 'yes' | 'no' (MOI, JAF, GID, PSD covering staff & premises)
+      aviationSecManager: null,      // 'yes' | 'no' (Dedicated CARC-licensed full-time security manager)
+      staffGoodConduct: null,        // 'yes' | 'no' (Good conduct, no moral turpitude felonies, NCASP compliant)
+
+      // Step 4: Infrastructure, Financial & Insurance (Art. 5/A/2, 5/A/5, 5/A/6)
+      suitablePremises: null,        // 'yes' | 'no' (Independent premises compliant with JCAR Parts 101 & 102)
+      financialCoverageType: null,   // 'insurance' | 'bond' | 'none'
+      insuranceDraftApproved: null,  // 'yes' | 'no' (Conditional if 'insurance': prior written CARC approval + mandatory coverages)
+      writtenUndertaking: null,      // 'yes' | 'no' (Health, admin, security, environmental, public safety undertaking)
+
+      // Step 5: Technical, Import, Tracking & Operational Compliance (Art. 5/A/7, 5/B-E, 6, 8, 10)
+      priorImportTechApproval: null, // 'yes' | 'no' (Committee type & import approval prior to entry)
+      utmAndRegNumber: null,         // 'yes' | 'no' (Electronic ID / Geofencing integrated with RJAF/CARC UTM + Reg # affixed)
+      missionFormAndEscort: null,    // 'yes' | 'no' (RJAF/CARC flight mission forms + Military Media/PSD escort & footage review)
+      storageAndRenewalAck: null     // 'yes' | 'no' (Committee transport/storage rules + Dec 15-30 annual renewal + Art. 8 registry restriction)
+    };
+
+    // Operational Purposes catalog from Article 4/B/2
+    const PURPOSES = [
+      { id: 'artistic', art: 'Art. 4/B/2/A/1', en: 'Artistic production & filmmaking', ar: 'التصوير للإنتاج الفني وصناعة الأفلام' },
+      { id: 'advertising', art: 'Art. 4/B/2/A/2', en: 'Advertising & commercial promotion', ar: 'التصوير للدعاية والإعلان' },
+      { id: 'tourism_mkt', art: 'Art. 4/B/2/A/3', en: 'Tourism marketing', ar: 'التصوير للتسويق السياحي' },
+      { id: 'events', art: 'Art. 4/B/2/A/4', en: 'Special events photography', ar: 'التصوير للمناسبات الخاصة' },
+      { id: 'mapping', art: 'Art. 4/B/2/A/5', en: 'Mapping & geographic surveying (Requires RJGC approval)', ar: 'التصوير لإعداد الخرائط والمسح الجغرافي (مشروط بموافقة المركز الجغرافي الملكي)' },
+      { id: 'cleaning', art: 'Art. 4/B/2/A/6', en: 'Building & facility cleaning', ar: 'تنظيف المباني والمنشآت' },
+      { id: 'surveillance', art: 'Art. 4/B/2/A/7', en: 'Security surveillance of facilities', ar: 'المراقبة الأمنية على المنشآت' },
+      { id: 'ops_mgmt', art: 'Art. 4/B/2/A/8', en: 'Drone operations management, storage & operation', ar: 'إدارة وتخزين وتشغيل عمليات الطائرات المسيرة' },
+      { id: 'agri_monitor', art: 'Art. 4/B/2/A/9', en: 'Agricultural crop monitoring', ar: 'مراقبة المحاصيل الزراعية' },
+      { id: 'agri_spray', art: 'Art. 4/B/2/A/10', en: 'Fertilizer & pesticide spraying/distribution', ar: 'توزيع ورش الأسمدة والمبيدات' },
+      { id: 'parcel', art: 'Art. 4/B/2/A/11', en: 'Small parcel delivery', ar: 'توصيل الطرود الصغيرة' },
+      { id: 'inspection', art: 'Art. 4/B/2/A/12', en: 'Infrastructure inspection (large buildings, utilities, industrial)', ar: 'التفتيش على البنية التحتية (المباني الكبيرة، المرافق العامة، المنشآت الصناعية)' },
+      { id: 'manufacturing', art: 'Art. 4/B/2/B', en: 'Manufacturing of drones, spare parts & accessories (sale/research)', ar: 'تصنيع الطائرات المسيرة و/أو قطع غيارها وملحقاتها (للبيع أو البحث العلمي)' },
+      { id: 'trading', art: 'Art. 4/B/2/C', en: 'Trading in drones, spare parts & accessories', ar: 'تجارة الطائرات المسيرة وقطع غيارها وملحقاتها' },
+      { id: 'maintenance', art: 'Art. 4/B/2/D', en: 'Maintenance of drones', ar: 'صيانة الطائرات المسيرة' },
+      { id: 'training', art: 'Art. 4/B/2/E', en: 'Training centers for drone operation or maintenance', ar: 'مراكز تدريب على استخدام أو صيانة الطائرات المسيرة' },
+      { id: 'firefighting', art: 'Art. 4/B/2/F', en: 'Firefighting', ar: 'مكافحة الحرائق' },
+      { id: 'airshows', art: 'Art. 4/B/2/G', en: 'Air shows', ar: 'العروض الجوية' },
+      { id: 'meteorology', art: 'Art. 4/B/2/H', en: 'Meteorology', ar: 'الأرصاد الجوية' },
+      { id: 'environment', art: 'Art. 4/B/2/I', en: 'Environmental protection', ar: 'حماية البيئة' },
+      { id: 'recreation', art: 'Art. 4/B/2/J', en: 'Recreational / tourist operations (licensed entity)', ar: 'الأنشطة الترفيهية / السياحية (للمنشآت المرخصة)' },
+      { id: 'other', art: 'Art. 4/B/2', en: 'Other specialized purpose (Subject to Special Committee determination)', ar: 'غايات أخرى تحددها اللجنة الخاصة' }
+    ];
+
+    // Bilingual UI Dictionary
+    const I18N = {
+      en: {
+        badgeAuthority: 'Hashemite Kingdom of Jordan • CARC',
+        lawRef: 'Civil Aviation Law No. 41 of 2007 (Art. 12/J)',
+        appTitle: 'Drone Regulatory Compliance Checker (2025 Instructions)',
+        appSubtitle: 'التعليمات الخاصة بالطائرات المسيرة لسنة 2025 — هيئة تنظيم الطيران المدني',
+        btnQuickRef: '2025 Instructions (Art. 1–13)',
+        liveStatusTitle: 'Live Pre-Check:',
+        statusInProgress: 'Assessment in Progress',
+        statusExemptReady: 'Exempt Entity (Art. 13)',
+        statusBlockersFound: 'Critical Non-Compliance Detected',
+        statusOnTrack: 'Requirements Met So Far',
+        btnBack: 'Previous Step',
+        btnNext: 'Next Step',
+        btnFinish: 'Generate Compliance Report',
+        btnReset: 'Reset',
+        sidebarLegalTitle: 'Applicable Legal Provisions',
+        art3Badge: 'Article 3 • Special Committee',
+        art3Title: 'Inter-Agency Drone Committee',
+        art3Desc: 'Chaired by CARC Director of Aviation Security & Facilitation, comprising representatives from the Ministry of Interior, JAF (Military Security, Intelligence, Drone Directorate, Military Judiciary, Royal Jordanian Air Force), GID, PSD, Jordan Customs, and CARC Security Standards/Oversight.',
+        art3Note: 'Meets at least monthly to review technical specs, operational purposes, transport/storage rules, and recommend licensing to the CARC Board President.',
+        enforcementTitle: 'Enforcement & Confiscation Rules',
+        enf1: 'Art. 6/A: Unlicensed border imports or unauthorized individual/commercial flights inside Jordan are subject to immediate confiscation by Customs or Security Agencies.',
+        enf2: 'Art. 7: Licenses may be suspended or revoked for exceeding altitude/path/time limits or 6 consecutive months of inactivity without excuse.',
+        enf3: 'Art. 8: Commercial registry or license changes require prior CARC President approval.',
+        drawerBadge: 'Official Regulatory Summary',
+        drawerTitle: 'CARC Drone Instructions (2025) — Articles 1 to 13',
+        footerNote: 'Based on Jordanian Civil Aviation Regulatory Commission (CARC) Instructions for Unmanned Aircraft (2025), issued pursuant to Article 12/J of Civil Aviation Law No. 41 of 2007.',
+        footerDisclaimer: 'Advisory Compliance Tool • Official licensing requires formal CARC submission',
+        yes: 'Yes',
+        no: 'No',
+        steps: [
+          { short: '1. Entity', title: 'Applicant Profile & Entity Eligibility' },
+          { short: '2. Purpose', title: 'Approved Operational Purpose' },
+          { short: '3. Security', title: 'Security Clearances & Personnel' },
+          { short: '4. Finance', title: 'Infrastructure, Financial & Insurance' },
+          { short: '5. Operations', title: 'Technical, Import, UTM & Operations' }
+        ]
+      },
+      ar: {
+        badgeAuthority: 'المملكة الأردنية الهاشمية • هيئة تنظيم الطيران المدني',
+        lawRef: 'قانون الطيران المدني رقم (41) لسنة 2007 (المادة 12/ر)',
+        appTitle: 'مدقق الامتثال لتعليمات الطائرات المسيرة لسنة 2025',
+        appSubtitle: 'Jordan CARC Drone Regulatory Compliance Checker',
+        btnQuickRef: 'نص التعليمات (المواد 1–13)',
+        liveStatusTitle: 'المؤشر الفوري:',
+        statusInProgress: 'التقييم قيد الإجراء',
+        statusExemptReady: 'جهة مستثناة بموجب المادة (13)',
+        statusBlockersFound: 'يوجد مخالفات جوهرية',
+        statusOnTrack: 'المتطلبات مستوفاة حتى الآن',
+        btnBack: 'الخطوة السابقة',
+        btnNext: 'الخطوة التالية',
+        btnFinish: 'إصدار تقرير الامتثال النهائي',
+        btnReset: 'إعادة ضبط',
+        sidebarLegalTitle: 'الأحكام القانونية ذات الصلة',
+        art3Badge: 'المادة (3) • اللجنة الخاصة',
+        art3Title: 'اللجنة الخاصة بالطائرات المسيرة',
+        art3Desc: 'تُشكل برئاسة مدير مديرية أمن وتسهيلات الطيران المدني وعضوية مندوبين عن: وزارة الداخلية، القوات المسلحة الأردنية (الأمن العسكري، الاستخبارات العسكرية، مديرية الطائرات المسيرة، القضاء العسكري، سلاح الجو الملكي)، دائرة المخابرات العامة، مديرية الأمن العام، الجمارك الأردنية، ومفتشي أمن الطيران في الهيئة.',
+        art3Note: 'تجتمع مرة على الأقل شهرياً لدراسة المواصفات الفنية والغايات التشغيلية وأسس النقل والتخزين والتنسيب للرئيس بالترخيص.',
+        enforcementTitle: 'أحكام الضبط والمصادرة وإلغاء الترخيص',
+        enf1: 'المادة (6/أ): تُصادر الجمارك والأجهزة الأمنية الطائرات وقطعها المضبوطة في المعابر الحدودية أو المستخدمة بشكل فردي أو تجاري مخالف داخل المملكة.',
+        enf2: 'المادة (7): يجوز وقف أو إلغاء الترخيص عند تجاوز الارتفاع أو المسار أو المواعيد المحددة أو عدم ممارسة النشاط لـ 6 أشهر متتالية دون عذر.',
+        enf3: 'المادة (8): يُحظر تعديل السجل التجاري أو الترخيص أو بيعه إلا بموافقة رئيس مجلس مفوضي الهيئة المستندة لتوصية اللجنة.',
+        drawerBadge: 'ملخص المرجع التنظيمي الرسمي',
+        drawerTitle: 'التعليمات الخاصة بالطائرات المسيرة لسنة 2025 (المواد 1–13)',
+        footerNote: 'مبني على التعليمات الخاصة بالطائرات المسيرة لسنة 2025 الصادرة عن هيئة تنظيم الطيران المدني الأردنية استناداً للمادة (12/ر) من قانون الطيران المدني رقم (41) لسنة 2007.',
+        footerDisclaimer: 'أداة استرشادية للامتثال • يتطلب الترخيص الرسمي تقديم طلب إلكتروني معتمد لدى الهيئة',
+        yes: 'نعم',
+        no: 'لا',
+        steps: [
+          { short: '1. الأهلية', title: 'صفة مقدم الطلب وأهلية الكيان القانوني' },
+          { short: '2. الغاية', title: 'الغايات التشغيلية المعتمدة (المادة 4/ب/2)' },
+          { short: '3. الأمن', title: 'الموافقات الأمنية ومتطلبات الكادر' },
+          { short: '4. التأمين', title: 'المقر والضمان المالي والتأمين' },
+          { short: '5. التشغيل', title: 'المتطلبات الفنية والاستيراد ونظام UTM والتشغيل' }
+        ]
+      }
+    };
+
+    // Full Reference Articles Data (Articles 1–13)
+    const ARTICLES_REFERENCE = [
+      {
+        num: 'Article 1 • المادة (1)',
+        enTitle: 'Title & Effective Date',
+        arTitle: 'التسمية وتاريخ النفاذ',
+        en: 'Issued pursuant to Article 12/J of Civil Aviation Law No. 41 of 2007 and its amendments; governs unmanned aircraft in the Hashemite Kingdom of Jordan.',
+        ar: 'صادرة استناداً لأحكام المادة (12/ر) من قانون الطيران المدني رقم (41) لسنة 2007 وتعديلاته.'
+      },
+      {
+        num: 'Article 2 • المادة (2)',
+        enTitle: 'Key Definitions (License Applicant & UTM)',
+        arTitle: 'التعاريف (طالب الترخيص ونظام UTM)',
+        en: 'Defines "License Applicant" strictly as a company or establishment registered with the Ministry of Industry, Trade and Supply (MIT). Defines "Unmanned Aircraft" as an aircraft without a pilot on board, and "UTM" as the Unmanned Traffic Management airspace system.',
+        ar: 'يعرّف "طالب الترخيص" حصراً بأنه شركة أو مؤسسة مسجلة لدى وزارة الصناعة والتجارة. ويعرّف "الطائرة المسيرة" بأنها الطائرة التي لا تحمل على متنها طياراً، و"UTM" بأنه نظام إدارة المجال الجوي للطائرات المسيرة.'
+      },
+      {
+        num: 'Article 3 • المادة (3)',
+        enTitle: 'The Special Committee',
+        arTitle: 'اللجنة الخاصة ومهامها',
+        en: 'Establishes an 11-member inter-agency committee chaired by CARC Director of Aviation Security & Facilitation (including MOI, JAF directorates, RJAF, GID, PSD, Customs, and CARC). Reviews technical specs, operational purposes, transport/storage rules, and submits licensing recommendations to the CARC President.',
+        ar: 'تُشكل اللجنة الخاصة برئاسة مدير مديرية أمن وتسهيلات الطيران المدني وعضوية الجهات الأمنية والعسكرية والجمركية لدراسة المواصفات الفنية والغايات ووضع أسس النقل والتخزين والتنسيب بالموافقة.'
+      },
+      {
+        num: 'Article 4 • المادة (4)',
+        enTitle: 'Security Clearances & Approved Purposes',
+        arTitle: 'الموافقات الأمنية والغايات المسموحة',
+        en: 'CARC obtains security clearances via the Ministry of Interior from: (1) MOI, (2) Jordanian Armed Forces, (3) General Intelligence Department (GID), and (4) Public Security Directorate (PSD) for all staff and premises. Lists 21 approved operational/commercial/industrial purposes plus Special Committee review for other purposes.',
+        ar: 'تتولى الهيئة من خلال وزارة الداخلية منح الموافقات الأمنية من (الداخلية، القوات المسلحة، المخابرات العامة، الأمن العام) للأشخاص والمقرات، وتحدد الغايات المسموحة ومنها التصوير والمسح الجغرافي (بموافقة المركز الجغرافي الملكي) والزراعة والتفتيش والتصنيع والتجارة والتدريب.'
+      },
+      {
+        num: 'Article 5 • المادة (5)',
+        enTitle: 'Licensing Conditions, Insurance, UTM & Renewal',
+        arTitle: 'شروط الرخصة والتأمين والتتبع والتجديد',
+        en: 'Requires: (1) Security clearances; (2) Notarized judicial financial guarantee OR insurance from a CBJ-licensed national insurer covering mandatory Third-Party Liability and Operator/Crew Insurance (optional Hull) with prior written CARC approval of the draft policy; (3) Jordanian partner equity compliance under Investment Environment Law No. 21 of 2022; (4) Full-time CARC-licensed Aviation Security Manager; (5) Staff good conduct; (6) Independent premises per JCAR Parts 101 & 102; (7) Written health/safety/environmental undertaking; (8) Prior technical/import approval; (9) Electronic ID/Geofencing integrated with RJAF/CARC UTM + affixed registration number; (10) Annual renewal between Dec 15–30.',
+        ar: 'تشترط الرخصة: الموافقات الأمنية، كفالة عدلية أو وثيقة تأمين وطنية (تغطي الطرف الثالث والمشغل إلزامياً والهيكل اختيارياً بعد موافقة الهيئة الخطية المسبقة على المسودة)، الالتزام بنسبة الشريك الأردني (قانون البيئة الاستثمارية 21 لسنة 2022)، مدير أمن طيران مرخص متفرغ، حسن سيرة الموظفين، مقر مستقل (الجزء 101 و102)، تعهد خطي، موافقة مسبقة قبل الاستيراد، نظام تتبع إلكتروني وربط مع UTM ووضع رقم التسجيل، والتجديد السنوي من 15-30 كانون أول.'
+      },
+      {
+        num: 'Article 6 • المادة (6)',
+        enTitle: 'Confiscation, Customs Clearance & Temporary Entry',
+        arTitle: 'الضبط والمصادرة والتخليص الجمركي والإدخال المؤقت',
+        en: 'Jordan Customs confiscates smuggled/unlicensed drones at borders; Security Agencies confiscate unauthorized individual or commercial drones inside Jordan. Temporary entry for filming requires Committee approval, border handover to Military Media Directorate or PSD, dedicated warehousing, and supervised re-export.',
+        ar: 'تصادر الجمارك والأجهزة الأمنية الطائرات المخالفة في المعابر أو داخل البلاد (فردية أو تجارية). الإدخال المؤقت للتصوير يتطلب موافقة اللجنة واستلامها من الإعلام العسكري أو الأمن العام والاحتفاظ بها في مستودعات مخصصة وإعادة إخراجها.'
+      },
+      {
+        num: 'Article 7 • المادة (7)',
+        enTitle: 'License Violations, Suspension & Revocation',
+        arTitle: 'مخالفة شروط الرخصة وإلغاؤها',
+        en: 'The CARC Board may suspend or revoke a license upon Committee recommendation if the licensee: (1) loses any license condition; (2) operates outside designated zones or exceeds altitude, flight path, schedule, or approved purpose; (3) violates Civil Aviation Law; (4) ceases licensed activity for 6 consecutive months without acceptable excuse; or (5) is subject to a judicial ruling.',
+        ar: 'للمجلس وقف أو إلغاء الترخيص عند فقدان أي شرط، أو الخروج عن المناطق/الارتفاع/المسار/المواعيد/الغاية المحددة، أو التوقف عن النشاط لمدة 6 أشهر متتالية دون عذر، أو صدور قرار قضائي.'
+      },
+      {
+        num: 'Article 8 • المادة (8)',
+        enTitle: 'Restrictions on Corporate & License Changes',
+        arTitle: 'حظر تعديل السجل التجاري أو التصرف بالرخصة',
+        en: 'No amendment to the company’s commercial registry, license, or certificate, nor sale or legal disposition thereof, is permitted without prior approval of the CARC President based on Committee recommendation.',
+        ar: 'لا يجوز إجراء أي تعديل على السجل التجاري للشركة أو الترخيص أو الشهادة أو بيعها أو التصرف القانوني بها إلا بموافقة الرئيس المستندة لتوصية اللجنة.'
+      },
+      {
+        num: 'Article 9 • المادة (9)',
+        enTitle: 'Unrestricted Inspection Authority',
+        arTitle: 'حق التفتيش غير المقيد',
+        en: 'CARC inspectors and competent judicial police officers have unrestricted right of entry to inspect facilities, operational procedures, and compliance.',
+        ar: 'لمفتشي الهيئة والضابطة العدلية المختصة حق الدخول غير المقيد للتفتيش ومراقبة التقيد بأحكام التعليمات وإجراءات العمل.'
+      },
+      {
+        num: 'Article 10 • المادة (10)',
+        enTitle: 'Flight Missions, Security Escort & Storage',
+        arTitle: 'إجراءات التشغيل والرفقة الأمنية والتخزين',
+        en: 'Operators must: (A) submit flight mission forms approved by RJAF & CARC until full UTM activation; (B) sign a security escort agreement with JAF Directorate of Moral Guidance/Military Media or PSD and submit filmed footage for review when near sensitive sites; (C) follow Committee transport/storage rules; (D) comply with public safety conditions.',
+        ar: 'يلتزم المشغل بتعبئة نموذج مهمات الطيران المعتمد من سلاح الجو والهيئة لحين تفعيل UTM، وتوقيع اتفاقية الرفقة الأمنية (الإعلام العسكري أو الأمن العام) ومراجعة التسجيلات قرب الأماكن الحساسة، والالتزام بشروط النقل والتخزين والسلامة العامة.'
+      },
+      {
+        num: 'Articles 11 & 12 • المادتان (11 و 12)',
+        enTitle: 'Penalties & Electronic Administration',
+        arTitle: 'العقوبات والإجراءات الإلكترونية',
+        en: 'Violations are prosecuted under Civil Aviation Law No. 41 of 2007 and applicable laws (Art. 11). CARC utilizes electronic portals for applications/approvals and e-payment channels for fees and fines (Art. 12).',
+        ar: 'تُطبق أحكام قانون الطيران المدني على المخالفين (مادة 11)، وتعتمد الهيئة الوسائل الإلكترونية لقبول الطلبات ومنح الموافقات وقنوات الدفع الإلكتروني (مادة 12).'
+      },
+      {
+        num: 'Article 13 • المادة (13)',
+        enTitle: 'Military & Security Exemptions',
+        arTitle: 'الجهات المستثناة',
+        en: 'Exempts the Jordanian Armed Forces (Arab Army), security agencies, and wholly-owned schools, institutes, and companies, without prejudice to technical/operational rules and air navigation rules within Controlled Airspace.',
+        ar: 'تُستثنى القوات المسلحة الأردنية - الجيش العربي والأجهزة الأمنية والمدارس والمعاهد والشركات المملوكة لها بالكامل، دون المساس بقواعد الجو والملاحة الجوية ضمن المجال الجوي المراقب.'
+      }
+    ];
+
+    // =========================================================================
+    // 2. HELPER FUNCTIONS (TOAST, DRAWER, LANGUAGE, NAVIGATION)
+    // =========================================================================
+    function showToast(msg) {
+      const box = document.getElementById('toastBox');
+      const text = document.getElementById('toastMessage');
+      text.textContent = msg;
+      box.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        box.classList.add('hidden');
+      }, 3500);
+    }
+
+    function toggleReferenceDrawer() {
+      const drawer = document.getElementById('referenceDrawer');
+      drawer.classList.toggle('hidden');
+      renderReferenceDrawer();
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'en' ? 'ar' : 'en';
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+      document.getElementById('langLabel').textContent = currentLang === 'en' ? 'العربية' : 'English';
+      document.getElementById('prevArrow').textContent = currentLang === 'en' ? '←' : '→';
+      document.getElementById('nextArrow').textContent = currentLang === 'en' ? '→' : '←';
+      applyStaticTranslations();
+      renderApp();
+    }
+
+    function applyStaticTranslations() {
+      const dict = I18N[currentLang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      });
+    }
+
+    function setAnswer(key, value) {
+      state[key] = value;
+      // Clear dependent conditional answers if parent switches
+      if (key === 'isExemptEntity' && value === 'yes') {
+        state.isTemporaryFilming = null;
+        state.isRegisteredCompany = null;
+      }
+      if (key === 'isTemporaryFilming' && value === 'no') {
+        state.tempApprovalAndEscort = null;
+      }
+      if (key === 'financialCoverageType' && value !== 'insurance') {
+        state.insuranceDraftApproved = null;
+      }
+      renderApp();
+    }
+
+    function togglePurpose(purposeId) {
+      const idx = state.selectedPurposes.indexOf(purposeId);
+      if (idx === -1) {
+        state.selectedPurposes.push(purposeId);
+      } else {
+        state.selectedPurposes.splice(idx, 1);
+        if (purposeId === 'mapping') state.rjgcApproval = null;
+        if (purposeId === 'other') state.otherPurposeDesc = '';
+      }
+      renderApp();
+    }
+
+    function updateOtherPurposeText(val) {
+      state.otherPurposeDesc = val;
+    }
+
+    function resetAssessment() {
+      Object.keys(state).forEach(k => {
+        if (Array.isArray(state[k])) state[k] = [];
+        else if (typeof state[k] === 'string') state[k] = '';
+        else state[k] = null;
+      });
+      currentStep = 1;
+      renderApp();
+      showToast(currentLang === 'en' ? 'Assessment reset to Step 1.' : 'تمت إعادة ضبط التقييم إلى الخطوة الأولى.');
+    }
+
+    function jumpToStep(stepNum) {
+      if (stepNum >= 1 && stepNum <= 6) {
+        currentStep = stepNum;
+        renderApp();
+      }
+    }
+
+    // =========================================================================
+    // 3. STEP VALIDATION & CONDITIONAL ROUTING LOGIC
+    // =========================================================================
+    function validateCurrentStep() {
+      const isAr = currentLang === 'ar';
+      if (currentStep === 1) {
+        if (!state.isExemptEntity) {
+          showToast(isAr ? 'يرجى تحديد ما إذا كانت الجهة مستثناة بموجب المادة (13).' : 'Please answer whether the entity is exempt under Article 13.');
+          return false;
+        }
+        if (state.isExemptEntity === 'yes') {
+          if (!state.controlledAirspaceAck) {
+            showToast(isAr ? 'يرجى الإجابة على سؤال الالتزام بقواعد المجال الجوي المراقب.' : 'Please answer the Controlled Airspace compliance question.');
+            return false;
+          }
+          return true; // Shortcut directly to final assessment for exempt military/security entities
+        }
+        if (!state.isTemporaryFilming) {
+          showToast(isAr ? 'يرجى تحديد ما إذا كان الطلب للإدخال المؤقت للتصوير.' : 'Please specify if this is a temporary entry request for filming.');
+          return false;
+        }
+        if (state.isTemporaryFilming === 'yes' && !state.tempApprovalAndEscort) {
+          showToast(isAr ? 'يرجى الإجابة على متطلبات الإدخال المؤقت والرفقة الأمنية.' : 'Please answer the temporary entry approval & security escort question.');
+          return false;
+        }
+        if (state.isTemporaryFilming === 'no') {
+          if (!state.isRegisteredCompany) {
+            showToast(isAr ? 'يرجى تحديد صفة مقدم الطلب (شركة/مؤسسة أم فرد).' : 'Please specify whether the applicant is an MIT-registered company/establishment.');
+            return false;
+          }
+          if (state.isRegisteredCompany === 'yes' && !state.jordanianShareholdingOk) {
+            showToast(isAr ? 'يرجى تأكيد الالتزام بنسبة حصة الشريك الأردني.' : 'Please answer the Jordanian partner equity compliance question.');
+            return false;
+          }
+        }
+      }
+
+      if (currentStep === 2) {
+        if (state.selectedPurposes.length === 0) {
+          showToast(isAr ? 'يرجى اختيار غاية تشغيلية واحدة على الأقل من المادة (4/ب/2).' : 'Please select at least one operational purpose under Article 4/B/2.');
+          return false;
+        }
+        if (state.selectedPurposes.includes('mapping') && !state.rjgcApproval) {
+          showToast(isAr ? 'يرجى تحديد ما إذا تم الحصول على موافقة المركز الجغرافي الملكي.' : 'Please specify whether Royal Jordanian Geographic Centre (RJGC) approval was obtained.');
+          return false;
+        }
+        if (state.selectedPurposes.includes('other') && !state.otherPurposeDesc.trim()) {
+          showToast(isAr ? 'يرجى وصف الغاية الأخرى لعرضها على اللجنة الخاصة.' : 'Please describe the other purpose for Special Committee determination.');
+          return false;
+        }
+      }
+
+      if (currentStep === 3) {
+        if (!state.securityClearancesAll4 || !state.aviationSecManager || !state.staffGoodConduct) {
+          showToast(isAr ? 'يرجى الإجابة على جميع أسئلة الموافقات الأمنية والكادر.' : 'Please answer all security clearance and personnel questions.');
+          return false;
+        }
+      }
+
+      if (currentStep === 4) {
+        if (!state.suitablePremises || !state.financialCoverageType || !state.writtenUndertaking) {
+          showToast(isAr ? 'يرجى الإجابة على جميع متطلبات المقر والتأمين والتعهد الخطي.' : 'Please complete all premises, financial guarantee/insurance, and undertaking questions.');
+          return false;
+        }
+        if (state.financialCoverageType === 'insurance' && !state.insuranceDraftApproved) {
+          showToast(isAr ? 'يرجى تحديد مدى استيفاء شروط وثيقة التأمين وموافقة الهيئة المسبقة.' : 'Please answer the prior CARC insurance draft approval question.');
+          return false;
+        }
+      }
+
+      if (currentStep === 5) {
+        if (!state.priorImportTechApproval || !state.utmAndRegNumber || !state.missionFormAndEscort || !state.storageAndRenewalAck) {
+          showToast(isAr ? 'يرجى الإجابة على جميع أسئلة الاستيراد والتتبع والتشغيل.' : 'Please complete all technical, import, UTM, and operational questions.');
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function nextStep() {
+      if (!validateCurrentStep()) return;
+
+      // Conditional fast-tracks to Final Report:
+      // 1. Exempt Military/Security Entity (Art. 13)
+      if (currentStep === 1 && state.isExemptEntity === 'yes') {
+        currentStep = 6;
+        renderApp();
+        return;
+      }
+      // 2. Temporary Border Entry for Filming (Art. 6/D) -> Jump straight to assessment
+      if (currentStep === 1 && state.isTemporaryFilming === 'yes') {
+        currentStep = 6;
+        renderApp();
+        return;
+      }
+
+      if (currentStep < 6) {
+        currentStep++;
+        renderApp();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function prevStep() {
+      if (currentStep === 6 && (state.isExemptEntity === 'yes' || state.isTemporaryFilming === 'yes')) {
+        currentStep = 1;
+        renderApp();
+        return;
+      }
+      if (currentStep > 1) {
+        currentStep--;
+        renderApp();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // =========================================================================
+    // 4. COMPLIANCE EVALUATION ENGINE
+    // =========================================================================
+    function evaluateCompliance() {
+      const isAr = currentLang === 'ar';
+      const met = [];
+      const unmet = [];
+      const warnings = [];
+
+      // Case A: Exempt Entity under Article 13
+      if (state.isExemptEntity === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (13)' : 'Article 13',
+          title: isAr ? 'استثناء الجهات العسكرية والأمنية والشركات المملوكة لها بالكامل' : 'Military, Security & Wholly-Owned Entity Exemption',
+          detail: isAr
+            ? 'الجهة مستثناة من إجراءات الترخيص التجارية الواردة في التعليمات.'
+            : 'Entity is exempt from standard commercial licensing provisions of the 2025 Instructions.'
+        });
+
+        if (state.controlledAirspaceAck === 'yes') {
+          met.push({
+            article: isAr ? 'المادة (13) - العجز' : 'Article 13 (Proviso)',
+            title: isAr ? 'الالتزام بقواعد الملاحة الجوية في المجال الجوي المراقب' : 'Controlled Airspace Navigation Compliance',
+            detail: isAr
+              ? 'الالتزام بالتعليمات الفنية والتشغيلية وقواعد الجو الناظمة لتحليق الطائرات ضمن المجال الجوي المراقب (Controlled Airspace).'
+              : 'Adheres to technical, operational, and air navigation rules governing drone flights within Controlled Airspace.'
+          });
+          return {
+            status: 'EXEMPT',
+            badgeEn: 'EXEMPT ENTITY • AIRSPACE COMPLIANT',
+            badgeAr: 'جهة مستثناة • ملتزمة بقواعد المجال الجوي',
+            summaryEn: 'Your organization is exempt under Article 13 of the 2025 CARC Instructions and meets Controlled Airspace coordination requirements.',
+            summaryAr: 'جهتكم مستثناة بموجب المادة (13) من تعليمات الطائرات المسيرة لسنة 2025 وتستوفي شرط التنسيق ضمن المجال الجوي المراقب.',
+            met,
+            unmet,
+            warnings
+          };
+        } else {
+          unmet.push({
+            article: isAr ? 'المادة (13)' : 'Article 13',
+            title: isAr ? 'عدم الالتزام بقواعد المجال الجوي المراقب' : 'Controlled Airspace Rules Non-Compliance',
+            detail: isAr
+              ? 'رغم الاستثناء، تُلزم المادة (13) بالامتثال الكامل للتعليمات الفنية والتشغيلية وقواعد الجو ضمن المجال الجوي المراقب.'
+              : 'Even for exempt military/security entities, Article 13 strictly mandates compliance with technical, operational, and air navigation rules inside Controlled Airspace.'
+          });
+          return {
+            status: 'PARTIAL',
+            badgeEn: 'EXEMPT ENTITY • ACTION REQUIRED (AIRSPACE)',
+            badgeAr: 'جهة مستثناة • يتطلب الامتثال لقواعد المجال الجوي',
+            summaryEn: 'While exempt from commercial licensing under Article 13, operations inside Controlled Airspace require strict adherence to CARC air navigation rules.',
+            summaryAr: 'على الرغم من الاستثناء بموجب المادة (13)، يجب الالتزام بقواعد الجو والملاحة الجوية عند التحليق في المجال الجوي المراقب.',
+            met,
+            unmet,
+            warnings
+          };
+        }
+      }
+
+      // Case B: Temporary Border Entry for Filming (Article 6/D)
+      if (state.isTemporaryFilming === 'yes') {
+        if (state.tempApprovalAndEscort === 'yes') {
+          met.push({
+            article: isAr ? 'المادة (6/د)' : 'Article 6/D',
+            title: isAr ? 'إجراءات الإدخال المؤقت للتصوير عبر المعابر الحدودية' : 'Temporary Entry for Filming via Border Crossings',
+            detail: isAr
+              ? 'الحصول على موافقة اللجنة الخاصة، وتسليم الطائرة لمندوب مديرية الإعلام العسكري أو الأمن العام، وحفظها في المستودعات المخصصة وإعادة إخراجها بعد التصوير.'
+              : 'Special Committee approval obtained, border handover to Military Media Directorate or PSD arranged, dedicated warehousing, and supervised re-export upon filming completion.'
+          });
+          warnings.push(
+            isAr
+              ? 'المادة (6/أ/1): أي إدخال عبر المعابر الحدودية دون إبراز موافقة اللجنة المسبقة يعرّض الطائرة وملحقاتها للمصادرة الفورية من قبل الجمارك الأردنية.'
+              : 'Article 6/A/1: Presenting drones at a border crossing without prior Special Committee approval results in immediate confiscation by Jordan Customs.'
+          );
+          return {
+            status: 'COMPLIANT',
+            badgeEn: 'COMPLIANT • TEMPORARY BORDER ENTRY (ART. 6/D)',
+            badgeAr: 'مستوفي لشروط الإدخال المؤقت (المادة 6/د)',
+            summaryEn: 'Your temporary filming entry satisfies Article 6/D border custody, storage, and re-export requirements.',
+            summaryAr: 'طلب الإدخال المؤقت للتصوير يستوفي أحكام المادة (6/د) المتعلقة بموافقة اللجنة والاستلام الأمني وإعادة الإخراج.',
+            met,
+            unmet,
+            warnings
+          };
+        } else {
+          unmet.push({
+            article: isAr ? 'المادة (6/د) والمادة (6/أ/1)' : 'Article 6/D & Article 6/A/1',
+            title: isAr ? 'عدم استيفاء شروط الإدخال المؤقت عبر الحدود' : 'Unmet Temporary Border Entry & Custody Conditions',
+            detail: isAr
+              ? 'يتطلب الإدخال المؤقت موافقة مسبقة من اللجنة الخاصة، واستلام الطائرة في المعبر من قبل مندوب مديرية الإعلام العسكري أو الأمن العام، وإيداعها في مستودعات مخصصة وإعادة إخراجها بعد التصوير.'
+              : 'Temporary entry requires prior Special Committee approval, border handover to a Military Media Directorate or PSD representative, storage in designated warehouses, and supervised re-export.'
+          });
+          warnings.push(
+            isAr
+              ? 'تحذير مصادرة (المادة 6/أ/1): ستقوم الجمارك الأردنية بمصادرة الطائرات المسيرة المضبوطة في المعابر الحدودية في حال عدم وجود موافقة مسبقة.'
+              : 'Confiscation Risk (Art. 6/A/1): Jordan Customs will confiscate any drone equipment arriving at border crossings without prior Committee authorization.'
+          );
+          return {
+            status: 'NON_COMPLIANT',
+            badgeEn: 'NON-COMPLIANT • HIGH CONFISCATION RISK AT BORDER',
+            badgeAr: 'غير مستوفي • خطر مصادرة فورية على الحدود',
+            summaryEn: 'Do not transport drones to a Jordanian border crossing without prior Special Committee approval and Military Media/PSD custody arrangements.',
+            summaryAr: 'يُحظر إدخال الطائرات المسيرة عبر المعابر الحدودية قبل الحصول على موافقة اللجنة الخاصة وترتيب الاستلام الأمني.',
+            met,
+            unmet,
+            warnings
+          };
+        }
+      }
+
+      // Case C: Standard Commercial / Institutional Licensing Track
+      // 1. Legal Entity Check (Article 2 & Article 6/A/2)
+      if (state.isRegisteredCompany === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (2)' : 'Article 2',
+          title: isAr ? 'أهلية مقدم الطلب (شركة أو مؤسسة مسجلة)' : 'Eligible Legal Entity (MIT-Registered Company/Establishment)',
+          detail: isAr
+            ? 'مقدم الطلب شركة أو مؤسسة مسجلة لدى وزارة الصناعة والتجارة وفق تعريف (طالب الترخيص).'
+            : 'Applicant is a company or establishment registered with the Ministry of Industry, Trade and Supply (MIT).'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (2) والمادة (6/أ/2)' : 'Article 2 & Article 6/A/2',
+          title: isAr ? 'عدم أهلية الأفراد للاستخدام الشخصي أو غير المرخص' : 'Ineligible Applicant (Individuals / Unregistered Entities)',
+          detail: isAr
+            ? 'تحصر المادة (2) صفة "طالب الترخيص" بالشركات والمؤسسات المسجلة لدى وزارة الصناعة والتجارة. الاستخدام الفردي محظور ويخضع للمصادرة الفورية من الأجهزة الأمنية بموجب المادة (6/أ/2).'
+            : 'Article 2 restricts "License Applicant" strictly to companies/establishments registered with MIT. Individual ownership/recreational use is ineligible for licensing and subject to immediate confiscation by Security Agencies under Article 6/A/2.'
+        });
+      }
+
+      // Jordanian Partner Shareholding (Article 5/A/2/B)
+      if (state.isRegisteredCompany === 'yes') {
+        if (state.jordanianShareholdingOk === 'yes') {
+          met.push({
+            article: isAr ? 'المادة (5/أ/2/ب)' : 'Article 5/A/2/B',
+            title: isAr ? 'الالتزام بنسبة حصة الشريك الأردني' : 'Jordanian Partner Shareholding Compliance',
+            detail: isAr
+              ? 'نسبة الشريك الأردني متوافقة مع قانون البيئة الاستثمارية رقم (21) لسنة 2022 والأنظمة والتعليمات الصادرة بموجبه.'
+              : 'Jordanian partner equity complies with Investment Environment Law No. 21 of 2022 and regulations issued thereunder.'
+          });
+        } else {
+          unmet.push({
+            article: isAr ? 'المادة (5/أ/2/ب)' : 'Article 5/A/2/B',
+            title: isAr ? 'عدم التحقق من نسبة الشريك الأردني' : 'Jordanian Equity Threshold Unverified / Non-Compliant',
+            detail: isAr
+              ? 'يجب أن تتوافق نسبة مساهمة الشريك الأردني في الشركة مع أحكام قانون البيئة الاستثمارية رقم (21) لسنة 2022.'
+              : 'Company ownership structure must satisfy Jordanian partner shareholding limits under Investment Environment Law No. 21 of 2022.'
+          });
+        }
+      }
+
+      // 2. Operational Purpose (Article 4/B/2)
+      if (state.selectedPurposes.length > 0) {
+        const labels = state.selectedPurposes.map(id => {
+          const p = PURPOSES.find(x => x.id === id);
+          return p ? (isAr ? p.ar : p.en) : id;
+        }).join(' • ');
+
+        met.push({
+          article: isAr ? 'المادة (4/ب/2)' : 'Article 4/B/2',
+          title: isAr ? 'الغايات التشغيلية المحددة في الطلب' : 'Specified Operational Purpose(s)',
+          detail: labels
+        });
+
+        if (state.selectedPurposes.includes('mapping')) {
+          if (state.rjgcApproval === 'yes') {
+            met.push({
+              article: isAr ? 'المادة (4/ب/2/أ/5)' : 'Article 4/B/2/A/5',
+              title: isAr ? 'موافقة المركز الجغرافي الملكي الأردني' : 'Royal Jordanian Geographic Centre (RJGC) Approval',
+              detail: isAr
+                ? 'تم الحصول على موافقة المركز الجغرافي الملكي لغايات التصوير لإعداد الخرائط والمسح الجغرافي.'
+                : 'Mandatory RJGC approval obtained for mapping and geographic surveying operations.'
+            });
+          } else {
+            unmet.push({
+              article: isAr ? 'المادة (4/ب/2/أ/5)' : 'Article 4/B/2/A/5',
+              title: isAr ? 'نقص موافقة المركز الجغرافي الملكي' : 'Missing Royal Jordanian Geographic Centre (RJGC) Approval',
+              detail: isAr
+                ? 'التصوير لإعداد الخرائط والمسح الجغرافي مشروط حصراً بالحصول على موافقة المركز الجغرافي الملكي الأردني.'
+                : 'Mapping and geographic surveying is strictly conditional upon obtaining formal approval from the Royal Jordanian Geographic Centre (RJGC).'
+            });
+          }
+        }
+
+        if (state.selectedPurposes.includes('other')) {
+          warnings.push(
+            isAr
+              ? `المادة (4/ب/2): الغاية الإضافية المطلوبة ("${state.otherPurposeDesc}") تخضع لدراسة وموافقة اللجنة الخاصة.`
+              : `Article 4/B/2: Your custom purpose ("${state.otherPurposeDesc}") requires explicit evaluation and approval by the Special Committee.`
+          );
+        }
+      }
+
+      // 3. Security Clearances & Personnel (Articles 4/A, 4/B/1, 5/A/1, 5/A/3, 5/A/4)
+      if (state.securityClearancesAll4 === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (4/أ و ب/1) والمادة (5/أ/1)' : 'Articles 4/A, 4/B/1 & 5/A/1',
+          title: isAr ? 'الموافقات الأمنية الشاملة من الجهات الأربع' : 'Four-Agency Security Clearances (Staff & Premises)',
+          detail: isAr
+            ? 'صدور الموافقات الأمنية عبر وزارة الداخلية من: (الداخلية، القوات المسلحة، المخابرات العامة، الأمن العام) لكافة العاملين والمقرات.'
+            : 'Security clearances obtained via MOI from Ministry of Interior, JAF, General Intelligence Department (GID), and Public Security Directorate (PSD) covering all personnel and premises.'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (4/أ و ب/1) والمادة (5/أ/1)' : 'Articles 4/A, 4/B/1 & 5/A/1',
+          title: isAr ? 'عدم استكمال الموافقات الأمنية الأربع' : 'Incomplete Four-Agency Security Clearances',
+          detail: isAr
+            ? 'يشترط حصول الهيئة عبر وزارة الداخلية على موافقة كل من: وزارة الداخلية، القوات المسلحة الأردنية، دائرة المخابرات العامة، ومديرية الأمن العام لجميع العاملين والمقرات.'
+            : 'CARC must obtain security clearances through MOI from all 4 bodies (MOI, JAF, GID, PSD) covering all personnel handling/operating drones and all operating/manufacturing premises.'
+        });
+      }
+
+      if (state.aviationSecManager === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (5/أ/3)' : 'Article 5/A/3',
+          title: isAr ? 'مدير / مشرف أمن طيران مرخص ومتفرغ' : 'Dedicated CARC-Licensed Aviation Security Manager',
+          detail: isAr
+            ? 'تعيين مدير أو مشرف أمن طيران مرخص من الهيئة ومتفرغ لأعمال الشركة.'
+            : 'Full-time Aviation Security Manager/Supervisor licensed by CARC is appointed.'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (5/أ/3)' : 'Article 5/A/3',
+          title: isAr ? 'عدم وجود مدير/مشرف أمن طيران مرخص ومتفرغ' : 'Missing Full-Time CARC-Licensed Aviation Security Manager',
+          detail: isAr
+            ? 'يجب أن يتوفر لدى طالب الترخيص مدير أو مشرف أمن طيران مرخص من هيئة تنظيم الطيران المدني ومتفرغ لأعمالها.'
+            : 'Applicant must employ a dedicated, full-time Aviation Security Manager/Supervisor licensed by CARC.'
+        });
+      }
+
+      if (state.staffGoodConduct === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (5/أ/4)' : 'Article 5/A/4',
+          title: isAr ? 'حسن السيرة والسلوك وخلو السوابق الجنائية' : 'Personnel Good Conduct & Background Vetting',
+          detail: isAr
+            ? 'جميع الموظفين من ذوي حسن السيرة والسلوك وغير محكومين بجناية مخلة بالشرف أو معايير عدم الأهلية في البرنامج الوطني لأمن الطيران المدني.'
+            : 'All employees possess good conduct records with no moral turpitude felonies or disqualifying criteria under the National Civil Aviation Security Program.'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (5/أ/4)' : 'Article 5/A/4',
+          title: isAr ? 'عدم استيفاء شروط أهلية الموظفين' : 'Unverified Personnel Good Conduct / NCASP Eligibility',
+          detail: isAr
+            ? 'يجب التأكد من أن جميع العاملين من ذوي حسن السيرة والسلوك وغير محكومين بجناية مخلة بالشرف أو خاضعين لمعايير عدم الأهلية في البرنامج الوطني لأمن الطيران المدني.'
+            : 'All staff must have verified good conduct records, no moral turpitude felony convictions, and no disqualifying criteria under the National Civil Aviation Security Program.'
+        });
+      }
+
+      // 4. Premises, Financial/Insurance & Undertaking (Articles 5/A/2, 5/A/5, 5/A/6)
+      if (state.suitablePremises === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (5/أ/5)' : 'Article 5/A/5',
+          title: isAr ? 'مقر مستقل ومطابق لتعليمات الطيران المدني (101 و 102)' : 'Independent Premises (JCAR Parts 101 & 102 Compliant)',
+          detail: isAr
+            ? 'توفر مقر مستقل ومناسب لمزاولة الأعمال وفق الموافقات الفنية لتعليمات الطيران المدني الجزء رقم (101 و 102).'
+            : 'Independent, suitable business premises meeting technical approvals under Civil Aviation Regulations Parts 101 & 102.'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (5/أ/5)' : 'Article 5/A/5',
+          title: isAr ? 'عدم توفر مقر مستقل مطابق للجزء (101 و 102)' : 'Non-Compliant or Missing Independent Premises',
+          detail: isAr
+            ? 'يشترط وجود مقر مستقل ومناسب لمزاولة النشاط حاصل على الموافقات الفنية وفق تعليمات الطيران المدني الجزء (101 و 102).'
+            : 'Applicant must maintain independent, suitable premises approved technically under CARC Civil Aviation Regulations Parts 101 & 102.'
+        });
+      }
+
+      if (state.financialCoverageType === 'bond') {
+        met.push({
+          article: isAr ? 'المادة (5/أ/2)' : 'Article 5/A/2',
+          title: isAr ? 'كفالة مالية عدلية لصالح الهيئة' : 'Notarized Judicial Financial Guarantee',
+          detail: isAr
+            ? 'تقديم كفالة مالية عدلية لصالح هيئة تنظيم الطيران المدني بالقيمة التي تحددها اللجنة حسب نوع النشاط وحجمه.'
+            : 'Notarized judicial financial guarantee issued in favor of CARC in the amount determined by the Special Committee based on activity type and scale.'
+        });
+      } else if (state.financialCoverageType === 'insurance') {
+        if (state.insuranceDraftApproved === 'yes') {
+          met.push({
+            article: isAr ? 'المادة (5/أ/2 - أولاً إلى رابعاً)' : 'Article 5/A/2 (First–Fourth)',
+            title: isAr ? 'وثيقة تأمين وطنية معتمدة مسبقاً من الهيئة' : 'CARC Pre-Approved National Aviation Insurance Policy',
+            detail: isAr
+              ? 'وثيقة من شركة تأمين وطنية مرخصة من البنك المركزي الأردني تشمل التأمين الإلزامي للطرف الثالث والمشغل والطاقم (والهيكل اختيارياً) بعد الموافقة الخطية المسبقة من الهيئة على المسودة.'
+              : 'Policy from a CBJ-licensed national insurer covering mandatory Third-Party Liability and Operator/Crew Insurance (optional Hull) with prior written CARC approval of the draft policy.'
+          });
+        } else {
+          unmet.push({
+            article: isAr ? 'المادة (5/أ/2 - ثانياً)' : 'Article 5/A/2 (Second)',
+            title: isAr ? 'حظر توقيع وثيقة التأمين دون موافقة خطية مسبقة من الهيئة' : 'Missing Prior Written CARC Approval on Insurance Draft',
+            detail: isAr
+              ? 'يُحظر التعاقد مع شركات التأمين أو توقيع الوثيقة إلا بعد الحصول على موافقة خطية مسبقة من الهيئة على مسودة الوثيقة، وتغطية الطرف الثالث والمشغل/الطاقم إلزامياً.'
+              : 'Contracting with an insurer or signing a policy is strictly prohibited without prior written CARC approval of the draft policy covering mandatory Third-Party and Operator/Crew risks.'
+          });
+        }
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (5/أ/2)' : 'Article 5/A/2',
+          title: isAr ? 'عدم توفر كفالة مالية عدلية أو تغطية تأمينية' : 'Missing Financial Guarantee or Aviation Insurance',
+          detail: isAr
+            ? 'يجب تقديم إما كفالة مالية عدلية لصالح الهيئة أو وثيقة تأمين وطنية معتمدة مسبقاً من الهيئة.'
+            : 'Applicant must provide either a notarized judicial financial bond in favor of CARC or a CARC pre-approved national insurance policy.'
+        });
+      }
+
+      if (state.writtenUndertaking === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (5/أ/6)' : 'Article 5/A/6',
+          title: isAr ? 'التعهد الخطي بالالتزام بالتشريعات والسلامة العامة' : 'Signed Regulatory & Public Safety Undertaking',
+          detail: isAr
+            ? 'تقديم تعهد خطي بالالتزام بكافة التشريعات الصحية والإدارية والأمنية والبيئية وشروط السلامة العامة.'
+            : 'Written undertaking submitted committing to all health, administrative, security, environmental, and public safety legislation.'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (5/أ/6)' : 'Article 5/A/6',
+          title: isAr ? 'نقص التعهد الخطي بالالتزام بالتشريعات' : 'Missing Written Regulatory Undertaking',
+          detail: isAr
+            ? 'يجب تقديم تعهد خطي للهيئة يتضمن التقيد بكافة التشريعات الصحية والإدارية والأمنية والبيئية وشروط السلامة العامة.'
+            : 'Applicant must submit a written undertaking committing to all health, administrative, security, environmental, and public safety regulations.'
+        });
+      }
+
+      // 5. Technical, Import, UTM & Operational Compliance (Articles 5/A/7, 5/B-E, 6, 8, 10)
+      if (state.priorImportTechApproval === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (5/أ/7 و 5/ب) والمادة (6/ب)' : 'Articles 5/A/7, 5/B & 6/B',
+          title: isAr ? 'اعتماد المواصفات الفنية وموافقة الاستيراد المسبقة' : 'Prior Technical Type & Import Approval',
+          detail: isAr
+            ? 'تحديد فئة الطائرة ومواصفاتها والحصول على موافقة اللجنة المسبقة قبل الاستيراد أو الإدخال إلى المملكة.'
+            : 'Drone category and technical specifications approved by the Special Committee prior to import or entry into Jordan.'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (5/أ/7 و 5/ب) والمادة (6/ب)' : 'Articles 5/A/7, 5/B & 6/B',
+          title: isAr ? 'عدم الحصول على الموافقة الفنية وموافقة الاستيراد المسبقة' : 'Missing Prior Technical & Import Approval',
+          detail: isAr
+            ? 'يُحظر استيراد أو إدخال الطائرات المسيرة وقطع غيارها قبل تحديد فئتها وإرفاق وثائقها الفنية والحصول على موافقة الهيئة واللجنة.'
+            : 'Importing or bringing drones/parts into Jordan without prior CARC/Committee technical type and import approval triggers customs hold/confiscation under Article 6.'
+        });
+      }
+
+      if (state.utmAndRegNumber === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (5/ج و 5/د)' : 'Articles 5/C & 5/D',
+          title: isAr ? 'التتبع الإلكتروني / السياج الجغرافي والربط مع UTM ورقم التسجيل' : 'Electronic ID / Geofencing, UTM Integration & Registration Marking',
+          detail: isAr
+            ? 'تزويد الطائرة بنظام تتبع إلكتروني وسياج جغرافي مدمج مع نظام (UTM) المعتمد من سلاح الجو الملكي والهيئة، وتثبيت رقم التسجيل عليها.'
+            : 'Drone equipped with Electronic ID & Geofencing integrated with the RJAF/CARC-approved UTM system, with registration number visibly affixed.'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (5/ج و 5/د)' : 'Articles 5/C & 5/D',
+          title: isAr ? 'نقص التتبع الإلكتروني (UTM) أو تثبيت رقم التسجيل' : 'Missing Electronic ID / Geofencing, UTM Link, or Registration Number',
+          detail: isAr
+            ? 'يُلزم المشغلون بتزويد كل طائرة بنظام تتبع إلكتروني/سياج جغرافي وربطها بنظام (UTM) المعتمد من سلاح الجو الملكي والهيئة، ووضع رقم التسجيل على هيكل الطائرة.'
+            : 'Every drone must have Electronic ID/Geofencing integrated with the RJAF/CARC UTM system and bear its official registration number.'
+        });
+      }
+
+      if (state.missionFormAndEscort === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (10/أ و 10/ب)' : 'Articles 10/A & 10/B',
+          title: isAr ? 'نماذج مهمات الطيران واتفاقية الرفقة الأمنية ومراجعة التسجيلات' : 'Flight Mission Forms, Security Escort & Footage Review',
+          detail: isAr
+            ? 'الالتزام بتعبئة نموذج مهمات الطيران المعتمد من سلاح الجو والهيئة لحين تفعيل UTM، وتوقيع اتفاقية الرفقة الأمنية (الإعلام العسكري أو الأمن العام) ومراجعة المادة الفيلمية قرب المواقع الحساسة.'
+            : 'Commitment to submitting RJAF/CARC flight mission forms (until full UTM activation), signing security escort agreements with Military Media or PSD, and submitting footage for review near sensitive sites.'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (10/أ و 10/ب)' : 'Articles 10/A & 10/B',
+          title: isAr ? 'عدم الالتزام بنماذج المهمات أو الرفقة الأمنية' : 'Missing Flight Mission Form or Security Escort Commitment',
+          detail: isAr
+            ? 'يجب تعبئة نموذج مهمات الطيران قبل التشغيل، وتوقيع اتفاقية الرفقة الأمنية مع مديرية الإعلام العسكري أو الأمن العام ومراجعة التسجيلات المصورة قرب الأماكن الحساسة.'
+            : 'Operators must file RJAF/CARC flight mission forms before flights, sign a security escort agreement with Military Media or PSD, and have recordings reviewed near sensitive sites.'
+        });
+      }
+
+      if (state.storageAndRenewalAck === 'yes') {
+        met.push({
+          article: isAr ? 'المادة (5/هـ) والمادة (8) والمادة (10/ج-د)' : 'Articles 5/E, 8 & 10/C-D',
+          title: isAr ? 'أسس النقل والتخزين والتجديد السنوي (15–30 كانون أول) وقيود السجل التجاري' : 'Transport/Storage Rules, Dec 15–30 Renewal & Registry Restrictions',
+          detail: isAr
+            ? 'الالتزام بشروط النقل والتخزين المعتمدة من اللجنة، والتجديد السنوي خلال الفترة (15–30 كانون أول)، وعدم تعديل السجل التجاري أو الرخصة إلا بموافقة رئيس الهيئة.'
+            : 'Adherence to Committee transport/storage conditions, annual renewal between December 15–30, and obtaining prior CARC President approval before any commercial registry or license modification.'
+        });
+      } else {
+        unmet.push({
+          article: isAr ? 'المادة (5/هـ) والمادة (8) والمادة (10/ج-د)' : 'Articles 5/E, 8 & 10/C-D',
+          title: isAr ? 'عدم الإقرار بشروط التخزين والتجديد السنوي وقيود التعديل' : 'Unacknowledged Storage, Dec 15–30 Renewal, or Registry Rules',
+          detail: isAr
+            ? 'يجب الالتزام بأسس النقل والتخزين، وتجديد الرخصة سنوياً بين 15–30 كانون أول، وعدم إجراء أي تعديل على السجل التجاري أو الرخصة دون موافقة رئيس الهيئة (المادة 8).'
+            : 'Operators must adhere to Committee transport/storage rules, renew annually between Dec 15–30, and never alter the commercial registry or license without CARC President approval (Art. 8).'
+        });
+      }
+
+      // Mandatory Operational Warnings (Articles 6, 7, 8, 9)
+      warnings.push(
+        isAr
+          ? 'المادة (7) - أسباب إلغاء الرخصة: يحق لمجلس مفوضي الهيئة وقف أو إلغاء الترخيص في حال تجاوز المناطق أو الارتفاع أو المسار أو المواعيد أو الغاية المحددة، أو التوقف عن ممارسة النشاط لمدة (6) أشهر متتالية دون عذر.'
+          : 'Article 7 (Suspension/Revocation Triggers): The CARC Board may suspend or revoke your license for flying outside authorized zones, exceeding altitude/path/time/purpose limits, or ceasing activity for 6 consecutive months without excuse.'
+      );
+      warnings.push(
+        isAr
+          ? 'المادة (9) - التفتيش: لمفتشي الهيئة والضابطة العدلية حق الدخول غير المقيد لمقرات الشركة ومواقع التشغيل للتفتيش ومراقبة الامتثال.'
+          : 'Article 9 (Unrestricted Inspection): CARC inspectors and judicial police officers hold unrestricted entry rights to inspect premises and operational procedures.'
+      );
+
+      // Determine overall status
+      if (state.isRegisteredCompany === 'no') {
+        return {
+          status: 'NON_COMPLIANT',
+          badgeEn: 'NON-COMPLIANT • INELIGIBLE ENTITY & CONFISCATION RISK',
+          badgeAr: 'غير مؤهل للترخيص • خطر المصادرة الفورية',
+          summaryEn: 'Under Article 2 and Article 6/A/2 of the 2025 CARC Instructions, individuals cannot be licensed to own or operate drones in Jordan. Only MIT-registered companies/establishments may apply.',
+          summaryAr: 'بموجب المادتين (2) و (6/أ/2)، لا يُسمح للأفراد بترخيص أو تشغيل الطائرات المسيرة في الأردن، ويُحصر الترخيص بالشركات والمؤسسات المسجلة لدى وزارة الصناعة والتجارة.',
+          met,
+          unmet,
+          warnings
+        };
+      }
+
+      if (unmet.length === 0) {
+        return {
+          status: 'COMPLIANT',
+          badgeEn: 'FULLY COMPLIANT • READY FOR CARC E-APPLICATION',
+          badgeAr: 'مستوفي لكافة المتطلبات • جاهز للتقديم الإلكتروني',
+          summaryEn: 'Your entity meets all eligibility, security, insurance, technical (UTM), and operational prerequisites under the 2025 CARC Drone Instructions.',
+          summaryAr: 'منشأتكم تستوفي كافة شروط الأهلية والموافقات الأمنية والتأمين والمتطلبات الفنية (UTM) والتشغيلية الواردة في تعليمات الطائرات المسيرة لسنة 2025.',
+          met,
+          unmet,
+          warnings
+        };
+      }
+
+      return {
+        status: 'PARTIAL',
+        badgeEn: `PARTIALLY COMPLIANT • ${unmet.length} ACTION ITEM(S) REQUIRED`,
+        badgeAr: `امتثال جزئي • يوجد (${unmet.length}) متطلبات غير مستوفاة`,
+        summaryEn: 'Your entity is eligible to apply, but you must resolve the unmet regulatory requirements below before operating or importing drones into Jordan.',
+        summaryAr: 'شركتكم مؤهلة مبدئياً، ولكن يجب استكمال المتطلبات التنظيمية غير المستوفاة أدناه قبل استيراد أو تشغيل أي طائرة مسيرة في المملكة.',
+        met,
+        unmet,
+        warnings
+      };
+    }
+
+    // =========================================================================
+    // 5. RENDERING ENGINE (STEPPER, QUESTIONS, SIDEBAR, FINAL REPORT)
+    // =========================================================================
+    function renderYesNoCard(stateKey, labelEn, labelAr, articleRef, hintEn, hintAr) {
+      const isAr = currentLang === 'ar';
+      const val = state[stateKey];
+      const title = isAr ? labelAr : labelEn;
+      const hint = isAr ? hintAr : hintEn;
+
+      return `
+        <div class="p-4 sm:p-5 rounded-2xl border ${val ? 'border-navy-600/40 bg-slate-50/70' : 'border-slate-200 bg-white'} transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-navy-900/10 text-navy-900">
+              ${articleRef}
+            </span>
+            ${val ? `<span class="text-[11px] font-semibold ${val === 'yes' ? 'text-emerald-700' : 'text-amber-700'}">${val === 'yes' ? (isAr ? 'تم الاختيار: نعم' : 'Selected: Yes') : (isAr ? 'تم الاختيار: لا' : 'Selected: No')}</span>` : ''}
+          </div>
+          <h3 class="text-sm sm:text-base font-bold text-slate-900 mb-1.5 leading-snug">${title}</h3>
+          ${hint ? `<p class="text-xs text-slate-600 mb-4 leading-relaxed">${hint}</p>` : '<div class="mb-3"></div>'}
+          
+          <div class="grid grid-cols-2 gap-3">
+            <button type="button" onclick="setAnswer('${stateKey}', 'yes')"
+              class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-bold transition cursor-pointer
+              ${val === 'yes'
+                ? 'bg-emerald-600 border-emerald-600 text-white shadow-sm'
+                : 'bg-white border-slate-300 text-slate-700 hover:border-emerald-500 hover:bg-emerald-50/50'}">
+              <span>✓</span>
+              <span>${I18N[currentLang].yes}</span>
+            </button>
+            <button type="button" onclick="setAnswer('${stateKey}', 'no')"
+              class="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border text-sm font-bold transition cursor-pointer
+              ${val === 'no'
+                ? 'bg-rose-600 border-rose-600 text-white shadow-sm'
+                : 'bg-white border-slate-300 text-slate-700 hover:border-rose-500 hover:bg-rose-50/50'}">
+              <span>✕</span>
+              <span>${I18N[currentLang].no}</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderStep1() {
+      const isAr = currentLang === 'ar';
+      let html = `
+        <div class="space-y-5">
+          <div class="border-b border-slate-100 pb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">
+              ${isAr ? 'الخطوة 1 • الأهلية القانونية' : 'Step 1 • Legal Standing & Eligibility'}
+            </span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+              ${isAr ? 'صفة مقدم الطلب وأهلية الكيان القانوني' : 'Applicant Profile & Entity Eligibility'}
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              ${isAr
+                ? 'تحدد المواد (2) و(6) و(13) الجهات المستثناة، وشروط الإدخال المؤقت، والكيانات المؤهلة للتقدم بطلب ترخيص.'
+                : 'Articles 2, 6, and 13 establish exempt state entities, temporary border entry rules, and eligible corporate applicants.'}
+            </p>
+          </div>
+
+          ${renderYesNoCard(
+            'isExemptEntity',
+            'Is the applicant the Jordanian Armed Forces (JAF - Arab Army), a Jordanian security agency, or a school, institute, or company wholly owned by them?',
+            'هل مقدم الطلب هو القوات المسلحة الأردنية (الجيش العربي) أو أحد الأجهزة الأمنية أو المدارس أو المعاهد أو الشركات المملوكة لها بالكامل؟',
+            isAr ? 'المادة (13)' : 'Article 13',
+            'Wholly-owned military and security institutions are exempt from commercial licensing procedures.',
+            'تُستثنى هذه الجهات من إجراءات الترخيص التجارية الواردة في التعليمات.'
+          )}
+      `;
+
+      // Conditional Branch 1: Exempt Entity
+      if (state.isExemptEntity === 'yes') {
+        html += `
+          <div class="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-xs sm:text-sm text-blue-900">
+            <strong>${isAr ? 'تنبيه الاستثناء (المادة 13):' : 'Exemption Notice (Article 13):'}</strong>
+            ${isAr
+              ? 'جهتكم مستثناة من أحكام هذه التعليمات، شريطة عدم المساس بالتعليمات الفنية والتشغيلية وقواعد الجو ضمن المجال الجوي المراقب.'
+              : 'Your organization is exempt from these Instructions, without prejudice to technical, operational, and air navigation rules within Controlled Airspace.'}
+          </div>
+          ${renderYesNoCard(
+            'controlledAirspaceAck',
+            'Does your operation adhere to CARC technical, operational, and air navigation rules whenever operating inside Controlled Airspace?',
+            'هل تلتزم عملياتكم بالتعليمات الفنية والتشغيلية وقواعد الجو الناظمة لتحليق الطائرات والملاحة الجوية ضمن المجال الجوي المراقب (Controlled Airspace)؟',
+            isAr ? 'المادة (13)' : 'Article 13',
+            'Mandatory proviso even for exempt military and security entities.',
+            'شرط إلزامي حتى للجهات العسكرية والأمنية المستثناة.'
+          )}
+        `;
+      }
+
+      // Conditional Branch 2: Non-Exempt Entity
+      if (state.isExemptEntity === 'no') {
+        html += renderYesNoCard(
+          'isTemporaryFilming',
+          'Is this a temporary entry request via Jordanian border crossings strictly for a filming project?',
+          'هل هذا الطلب مخصص للإدخال المؤقت لطائرات مسيرة عبر المعابر الحدودية لغايات التصوير فقط؟',
+          isAr ? 'المادة (6/د)' : 'Article 6/D',
+          'Temporary border entry is governed by special custody and re-export rules under Article 6/D.',
+          'يخضع الإدخال المؤقت عبر المعابر الحدودية لإجراءات استلام وإعادة إخراج خاصة بموجب المادة (6/د).'
+        );
+
+        if (state.isTemporaryFilming === 'yes') {
+          html += renderYesNoCard(
+            'tempApprovalAndEscort',
+            'Have you obtained prior Special Committee approval AND arranged border handover to a Military Media Directorate or Public Security Directorate (PSD) representative for dedicated warehousing and supervised re-export?',
+            'هل حصلتم على موافقة اللجنة الخاصة المسبقة وتم التنسيق لاستلام الطائرة في المعبر الحدودي من قبل مندوب مديرية الإعلام العسكري أو الأمن العام لحفظها في المستودعات المخصصة وإعادة إخراجها بعد التصوير؟',
+            isAr ? 'المادة (6/د)' : 'Article 6/D',
+            'Without prior approval, Jordan Customs will confiscate the equipment at the border (Art. 6/A/1).',
+            'في حال عدم وجود موافقة مسبقة، تقوم الجمارك الأردنية بمصادرة المواد في المعابر الحدودية (المادة 6/أ/1).'
+          );
+        }
+
+        if (state.isTemporaryFilming === 'no') {
+          html += renderYesNoCard(
+            'isRegisteredCompany',
+            'Is the applicant a company or establishment officially registered with the Jordanian Ministry of Industry, Trade and Supply (MIT)?',
+            'هل مقدم الطلب شركة أو مؤسسة مسجلة رسمياً لدى وزارة الصناعة والتجارة والتموين في الأردن؟',
+            isAr ? 'المادة (2) والمادة (6/أ/2)' : 'Article 2 & Article 6/A/2',
+            'Article 2 defines "License Applicant" exclusively as an MIT-registered company or establishment. Individual personal/recreational drone ownership is not eligible for licensing.',
+            'تُعرّف المادة (2) "طالب الترخيص" حصراً بأنه شركة أو مؤسسة مسجلة لدى وزارة الصناعة والتجارة. الاستخدام الفردي غير مؤهل للترخيص ويخضع للمصادرة.'
+          );
+
+          if (state.isRegisteredCompany === 'no') {
+            html += `
+              <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs sm:text-sm text-rose-900 space-y-1">
+                <div class="font-bold flex items-center gap-2">
+                  <span>⚠️</span>
+                  <span>${isAr ? 'تنبيه عدم الأهلية القانونية (المادتان 2 و 6/أ/2)' : 'Legal Ineligibility Warning (Articles 2 & 6/A/2)'}</span>
+                </div>
+                <p>
+                  ${isAr
+                    ? 'لا تمنح التعليمات تراخيص للأفراد. أي حيازة أو استخدام فردي داخل المملكة يعرّض الطائرة للمصادرة الفورية من الأجهزة الأمنية بموجب المادة (6/أ/2). يمكنك متابعة التقييم للاطلاع على التقرير الكامل.'
+                    : 'The 2025 Instructions do not permit individual/personal drone licensing. Any unauthorized individual possession or flight inside Jordan is subject to immediate confiscation by Security Agencies under Article 6/A/2. You may still proceed to view the full diagnostic.'}
+                </p>
+              </div>
+            `;
+          }
+
+          if (state.isRegisteredCompany === 'yes') {
+            html += renderYesNoCard(
+              'jordanianShareholdingOk',
+              'Does the Jordanian partner shareholding percentage in the company comply with Investment Environment Law No. 21 of 2022 and its regulations?',
+              'هل تتوافق نسبة حصة الشريك الأردني في الشركة مع أحكام قانون البيئة الاستثمارية رقم (21) لسنة 2022 والأنظمة والتعليمات الصادرة بموجبه؟',
+              isAr ? 'المادة (5/أ/2/ب)' : 'Article 5/A/2/B',
+              'Required corporate ownership condition for CARC drone licensing.',
+              'شرط أساسي متعلق بهيكل ملكية الشركة لغايات الترخيص.'
+            );
+          }
+        }
+      }
+
+      html += `</div>`;
+      return html;
+    }
+
+    function renderStep2() {
+      const isAr = currentLang === 'ar';
+      let html = `
+        <div class="space-y-5">
+          <div class="border-b border-slate-100 pb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">
+              ${isAr ? 'الخطوة 2 • نطاق النشاط' : 'Step 2 • Operational Scope'}
+            </span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+              ${isAr ? 'الغايات التشغيلية المعتمدة (المادة 4/ب/2)' : 'Approved Operational Purpose (Article 4/B/2)'}
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              ${isAr
+                ? 'اختر غاية واحدة أو أكثر من الغايات المنصوص عليها في المادة (4/ب/2) والتي ستُصدر الموافقات الأمنية والترخيص على أساسها.'
+                : 'Select one or more purposes listed under Article 4/B/2 for which security approvals and CARC licensing are sought.'}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-[420px] overflow-y-auto pr-1">
+      `;
+
+      PURPOSES.forEach(p => {
+        const checked = state.selectedPurposes.includes(p.id);
+        html += `
+          <label onclick="togglePurpose('${p.id}')"
+            class="flex items-start gap-3 p-3.5 rounded-xl border text-left rtl:text-right transition cursor-pointer select-none
+            ${checked ? 'border-navy-800 bg-navy-900/5 shadow-xs' : 'border-slate-200 bg-white hover:border-slate-300'}">
+            <div class="mt-0.5 w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition
+              ${checked ? 'bg-navy-900 border-navy-900 text-white' : 'border-slate-300 bg-white'}">
+              ${checked ? '<span class="text-xs font-bold">✓</span>' : ''}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="text-[10px] font-bold text-amber-700 uppercase tracking-wide">${p.art}</div>
+              <div class="text-xs sm:text-sm font-semibold text-slate-900 leading-snug mt-0.5">
+                ${isAr ? p.ar : p.en}
+              </div>
+            </div>
+          </label>
+        `;
+      });
+
+      html += `</div>`;
+
+      // Conditional Question 1: Mapping -> RJGC Approval (Article 4/B/2/A/5)
+      if (state.selectedPurposes.includes('mapping')) {
+        html += `
+          <div class="pt-2">
+            ${renderYesNoCard(
+              'rjgcApproval',
+              'Have you obtained formal approval from the Royal Jordanian Geographic Centre (RJGC) for mapping and geographic surveying?',
+              'هل تم الحصول على موافقة المركز الجغرافي الملكي الأردني لممارسة التصوير لإعداد الخرائط والمسح الجغرافي؟',
+              isAr ? 'المادة (4/ب/2/أ/5)' : 'Article 4/B/2/A/5',
+              'Mandatory statutory precondition for any aerial mapping or geographic surveying activity.',
+              'شرط إلزامي صريح لممارسة نشاط التصوير لإعداد الخرائط والمسح الجغرافي.'
+            )}
+          </div>
+        `;
+      }
+
+      // Conditional Question 2: Other Purpose -> Special Committee Determination
+      if (state.selectedPurposes.includes('other')) {
+        html += `
+          <div class="p-4 rounded-2xl border border-amber-300 bg-amber-50/70 space-y-2">
+            <label class="block text-xs sm:text-sm font-bold text-slate-900">
+              ${isAr
+                ? 'يرجى تحديد الغاية الأخرى المطلوبة لعرضها على اللجنة الخاصة (المادة 4/ب/2):'
+                : 'Specify the custom operational purpose for Special Committee determination (Article 4/B/2):'}
+            </label>
+            <input type="text" value="${state.otherPurposeDesc.replace(/"/g, '&quot;')}" oninput="updateOtherPurposeText(this.value)"
+              placeholder="${isAr ? 'مثال: مراقبة خطوط الطاقة المتجددة...' : 'e.g., Solar farm thermal inspection...'}"
+              class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-navy-800" />
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      return html;
+    }
+
+    function renderStep3() {
+      const isAr = currentLang === 'ar';
+      return `
+        <div class="space-y-5">
+          <div class="border-b border-slate-100 pb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">
+              ${isAr ? 'الخطوة 3 • الأمن والكوادر' : 'Step 3 • Security & Personnel'}
+            </span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+              ${isAr ? 'الموافقات الأمنية ومتطلبات الكادر البشري' : 'Security Clearances & Personnel Requirements'}
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              ${isAr
+                ? 'تشترط المادتان (4) و(5) موافقات أمنية من أربع جهات سيادية وتعيين مدير أمن طيران مرخص ومتفرغ.'
+                : 'Articles 4 and 5 require clearances from four sovereign security bodies and a dedicated CARC-licensed Aviation Security Manager.'}
+            </p>
+          </div>
+
+          ${renderYesNoCard(
+            'securityClearancesAll4',
+            'Have security clearances been obtained through the Ministry of Interior from ALL FOUR required bodies: (1) Ministry of Interior, (2) Jordanian Armed Forces, (3) General Intelligence Department (GID), and (4) Public Security Directorate (PSD) covering all personnel and operating/manufacturing premises?',
+            'هل صدرت الموافقات الأمنية اللازمة من خلال وزارة الداخلية من الجهات الأربع كافة: (1) وزارة الداخلية، (2) القوات المسلحة الأردنية / الجيش العربي، (3) دائرة المخابرات العامة، (4) مديرية الأمن العام، لتشمل جميع العاملين ومقرات التشغيل أو التصنيع؟',
+            isAr ? 'المادة (4/أ و ب/1) والمادة (5/أ/1)' : 'Articles 4/A, 4/B/1 & 5/A/1',
+            'Covers every employee involved in operating or directly handling drones as well as all business/manufacturing locations.',
+            'تشمل الموافقات جميع الأشخاص المرتبطين بتشغيل أو التعامل المباشر مع الطائرة ومقرات مزاولة العمل أو التصنيع.'
+          )}
+
+          ${renderYesNoCard(
+            'aviationSecManager',
+            'Does the applicant employ a dedicated, full-time Aviation Security Manager / Supervisor licensed by CARC?',
+            'هل يتوفر لدى طالب الترخيص مدير أو مشرف أمن طيران مرخص من هيئة تنظيم الطيران المدني ومتفرغ لأعمال الشركة؟',
+            isAr ? 'المادة (5/أ/3)' : 'Article 5/A/3',
+            'Must be full-time and specifically licensed by CARC in accordance with the company’s activity.',
+            'يجب أن يكون مرخصاً من الهيئة ومتفرغاً لأعمال الشركة وحسب نشاطها.'
+          )}
+
+          ${renderYesNoCard(
+            'staffGoodConduct',
+            'Do all employees possess verified good conduct records with no felony convictions involving moral turpitude and no disqualifying criteria under the National Civil Aviation Security Program (NCASP)?',
+            'هل جميع الموظفين من ذوي حسن السيرة والسلوك وغير محكومين بجناية مخلة بالشرف أو خاضعين لمعايير عدم الأهلية الواردة في البرنامج الوطني لأمن الطيران المدني؟',
+            isAr ? 'المادة (5/أ/4)' : 'Article 5/A/4',
+            'Applies to all operational, technical, and administrative staff.',
+            'ينطبق على كافة العاملين لدى طالب الترخيص.'
+          )}
+        </div>
+      `;
+    }
+
+    function renderStep4() {
+      const isAr = currentLang === 'ar';
+      const cov = state.financialCoverageType;
+
+      let html = `
+        <div class="space-y-5">
+          <div class="border-b border-slate-100 pb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">
+              ${isAr ? 'الخطوة 4 • المقر والضمان المالي' : 'Step 4 • Premises & Financial Guarantee'}
+            </span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+              ${isAr ? 'المقر المستقل، الضمان المالي/التأمين، والتعهد الخطي' : 'Infrastructure, Financial & Insurance Requirements'}
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              ${isAr
+                ? 'تحدد المادة (5/أ) متطلبات المقر وفق الجزأين (101 و102)، وشروط الكفالة العدلية أو وثيقة التأمين المعتمدة.'
+                : 'Article 5/A specifies premises standards under JCAR Parts 101 & 102, financial bonds or pre-approved insurance policies, and regulatory undertakings.'}
+            </p>
+          </div>
+
+          ${renderYesNoCard(
+            'suitablePremises',
+            'Does the applicant maintain independent, suitable premises compliant with technical approvals under CARC Civil Aviation Regulations (JCAR) Parts 101 & 102?',
+            'هل يتوفر لدى طالب الترخيص مقر مستقل ومناسب لمزاولة أعماله وحاصل على الموافقات الفنية وفق تعليمات الطيران المدني الجزء رقم (101 و 102)؟',
+            isAr ? 'المادة (5/أ/5)' : 'Article 5/A/5',
+            'Shared or unapproved residential addresses do not satisfy JCAR Parts 101 & 102.',
+            'يجب أن يكون المقر مستقلاً ومناسباً وحاصلاً على الموافقة الفنية بموجب الجزء (101 و 102).'
+          )}
+
+          <!-- Financial Guarantee or Insurance Selector -->
+          <div class="p-4 sm:p-5 rounded-2xl border border-slate-200 bg-white space-y-3">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-bold bg-navy-900/10 text-navy-900">
+              ${isAr ? 'المادة (5/أ/2)' : 'Article 5/A/2'}
+            </span>
+            <h3 class="text-sm sm:text-base font-bold text-slate-900">
+              ${isAr
+                ? 'ما هي وسيلة الضمان المالي التي ستقدمها الشركة لصالح هيئة تنظيم الطيران المدني؟'
+                : 'Which financial security instrument is the applicant providing in favor of CARC?'}
+            </h3>
+            <p class="text-xs text-slate-600">
+              ${isAr
+                ? 'تُلزم المادة (5/أ/2) بتقديم إما كفالة مالية عدلية تحدد قيمتها اللجنة، أو وثيقة تأمين من شركة تأمين وطنية مرخصة من البنك المركزي الأردني.'
+                : 'Article 5/A/2 requires either a notarized judicial financial bond determined by the Committee OR an approved policy from a CBJ-licensed national insurance company.'}
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+              <button type="button" onclick="setAnswer('financialCoverageType', 'insurance')"
+                class="p-3.5 rounded-xl border text-left rtl:text-right transition cursor-pointer
+                ${cov === 'insurance' ? 'border-navy-900 bg-navy-900 text-white shadow-sm' : 'border-slate-300 bg-white text-slate-800 hover:border-navy-600'}">
+                <div class="text-xs font-bold">${isAr ? 'وثيقة تأمين وطنية' : 'National Insurance Policy'}</div>
+                <div class="text-[11px] mt-1 ${cov === 'insurance' ? 'text-slate-200' : 'text-slate-500'}">
+                  ${isAr ? 'مرخصة من البنك المركزي الأردني' : 'CBJ-licensed national insurer'}
+                </div>
+              </button>
+
+              <button type="button" onclick="setAnswer('financialCoverageType', 'bond')"
+                class="p-3.5 rounded-xl border text-left rtl:text-right transition cursor-pointer
+                ${cov === 'bond' ? 'border-navy-900 bg-navy-900 text-white shadow-sm' : 'border-slate-300 bg-white text-slate-800 hover:border-navy-600'}">
+                <div class="text-xs font-bold">${isAr ? 'كفالة مالية عدلية' : 'Notarized Judicial Bond'}</div>
+                <div class="text-[11px] mt-1 ${cov === 'bond' ? 'text-slate-200' : 'text-slate-500'}">
+                  ${isAr ? 'تحدد قيمتها اللجنة حسب النشاط' : 'Amount set by Special Committee'}
+                </div>
+              </button>
+
+              <button type="button" onclick="setAnswer('financialCoverageType', 'none')"
+                class="p-3.5 rounded-xl border text-left rtl:text-right transition cursor-pointer
+                ${cov === 'none' ? 'border-rose-600 bg-rose-600 text-white shadow-sm' : 'border-slate-300 bg-white text-slate-800 hover:border-rose-400'}">
+                <div class="text-xs font-bold">${isAr ? 'لا يتوفر حالياً' : 'None Arranged Yet'}</div>
+                <div class="text-[11px] mt-1 ${cov === 'none' ? 'text-rose-100' : 'text-slate-500'}">
+                  ${isAr ? 'لم يتم ترتيب كفالة أو تأمين' : 'Neither bond nor policy ready'}
+                </div>
+              </button>
+            </div>
+          </div>
+      `;
+
+      // Conditional Insurance Policy Sub-Check (Article 5/A/2 First to Fourth)
+      if (cov === 'insurance') {
+        html += renderYesNoCard(
+          'insuranceDraftApproved',
+          'Have you obtained PRIOR WRITTEN APPROVAL from CARC on the draft policy BEFORE signing with the CBJ-licensed national insurer, ensuring mandatory Third-Party Liability and Operator/Crew coverage (plus optional Hull coverage)?',
+          'هل تم الحصول على موافقة خطية مسبقة من هيئة تنظيم الطيران المدني على مسودة وثيقة التأمين قبل التعاقد أو التوقيع مع شركة التأمين الوطنية، بحيث تشمل تغطية الطرف الثالث (إلزامي) والمشغل وطاقم التشغيل (إلزامي) وجسم الطائرة (اختياري)؟',
+          isAr ? 'المادة (5/أ/2 - أولاً إلى رابعاً)' : 'Article 5/A/2 (First–Fourth)',
+          'Signing an insurance contract before CARC approves the draft in writing is explicitly prohibited.',
+          'يُحظر التعاقد مع شركات التأمين أو توقيع الوثيقة إلا بعد الحصول على موافقة خطية مسبقة من الهيئة على مسودة الوثيقة.'
+        );
+      }
+
+      html += renderYesNoCard(
+        'writtenUndertaking',
+        'Has the applicant submitted a signed written undertaking committing to comply with all health, administrative, security, environmental, and public safety legislation?',
+        'هل قدم طالب الترخيص للهيئة تعهداً خطياً يتضمن التقيد بكافة التشريعات الخاصة بالشؤون الصحية والإدارية والأمنية والبيئية وشروط السلامة العامة والالتزام بها؟',
+        isAr ? 'المادة (5/أ/6)' : 'Article 5/A/6',
+        'Mandatory legal declaration required for license issuance.',
+        'إقرار خطي إلزامي ضمن ملف طلب الترخيص.'
+      );
+
+      html += `</div>`;
+      return html;
+    }
+
+    function renderStep5() {
+      const isAr = currentLang === 'ar';
+      return `
+        <div class="space-y-5">
+          <div class="border-b border-slate-100 pb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-600">
+              ${isAr ? 'الخطوة 5 • الجاهزية الفنية والتشغيلية' : 'Step 5 • Technical & Operational Readiness'}
+            </span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+              ${isAr ? 'الاستيراد، التتبع الإلكتروني (UTM)، وإجراءات التشغيل' : 'Technical, Import, Tracking & Operational Compliance'}
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              ${isAr
+                ? 'تغطي المواد (5) و(6) و(8) و(10) الموافقة المسبقة للاستيراد، والربط مع نظام UTM، ونماذج المهمات، والرفقة الأمنية، والتجديد السنوي.'
+                : 'Articles 5, 6, 8, and 10 govern pre-import approvals, UTM tracking, mission filing, security escorts, and annual renewal.'}
+            </p>
+          </div>
+
+          ${renderYesNoCard(
+            'priorImportTechApproval',
+            'Were the drone category and detailed technical specifications submitted and approved by the Special Committee & CARC BEFORE importing or bringing any drones, spare parts, or accessories into Jordan?',
+            'هل تم تحديد فئة الطائرات المسيرة وإرفاق وثائقها الفنية التفصيلية والحصول على موافقة اللجنة الخاصة والهيئة قبل استيراد أو إدخال الطائرات وملحقاتها وقطع الغيار إلى أراضي المملكة؟',
+            isAr ? 'المادة (5/أ/7 و 5/ب) والمادة (6/ب)' : 'Articles 5/A/7, 5/B & 6/B',
+            'Jordan Customs verifies CARC license, import license, certificate of origin, invoice, and technical approval during clearance.',
+            'تتأكد دائرة الجمارك أثناء التخليص من رخصة الهيئة ورخصة الاستيراد وشهادة المنشأ والفاتورة ومطابقة المواصفات الفنية.'
+          )}
+
+          ${renderYesNoCard(
+            'utmAndRegNumber',
+            'Is every drone equipped with Electronic ID and Geofencing integrated with the Unmanned Traffic Management (UTM) system approved by the Royal Jordanian Air Force (RJAF) and CARC, with its registration number affixed on the aircraft?',
+            'هل كل طائرة مزودة بنظام تتبع إلكتروني وسياج جغرافي (Geofencing & Electronic ID) مدمج مع نظام إدارة المجال الجوي للطائرات المسيرة (UTM) المعتمد من سلاح الجو الملكي والهيئة، ومثبت عليها رقم التسجيل؟',
+            isAr ? 'المادة (5/ج و 5/د)' : 'Articles 5/C & 5/D',
+            'Enables real-time airspace tracking by all competent security and aviation authorities.',
+            'يمكّن كافة الجهات المختصة من تتبع الطائرة عند استخدام المجال الجوي كل حسب اختصاصه.'
+          )}
+
+          ${renderYesNoCard(
+            'missionFormAndEscort',
+            'Does the operator commit to: (1) submitting RJAF/CARC-approved flight mission forms prior to flights (until full UTM activation), AND (2) signing a security escort agreement with JAF Military Media Directorate or PSD (including footage review when near sensitive sites)?',
+            'هل يلتزم المشغل بتعبئة نموذج مهمات الطيران المعتمد لدى سلاح الجو الملكي والهيئة لحين تفعيل نظام (UTM)، وتوقيع اتفاقية الرفقة الأمنية من القوات المسلحة (مديرية الإعلام العسكري) أو الأمن العام ومراجعة التسجيلات المصورة في حال وجود أماكن حساسة قريبة؟',
+            isAr ? 'المادة (10/أ و 10/ب)' : 'Articles 10/A & 10/B',
+            'Strict operational prerequisite prior to every aerial mission.',
+            'إجراء تشغيلي إلزامي قبل تنفيذ أي مهمة طيران.'
+          )}
+
+          ${renderYesNoCard(
+            'storageAndRenewalAck',
+            'Does the applicant commit to: (1) Committee transport & storage rules, (2) annual license renewal between December 15–30, and (3) obtaining prior CARC President approval before any commercial registry or license modification?',
+            'هل يلتزم طالب الترخيص بالأسس المحددة من اللجنة للنقل والتخزين، وتجديد الرخصة سنوياً خلال الفترة (15–30 كانون أول)، وعدم إجراء أي تعديل على السجل التجاري أو الرخصة أو بيعها إلا بموافقة رئيس الهيئة؟',
+            isAr ? 'المادة (5/هـ) والمادة (8) والمادة (10/ج-د)' : 'Articles 5/E, 8 & 10/C-D',
+            'Failure to renew or unauthorized registry changes violate the 2025 Instructions.',
+            'عدم التجديد في الموعد المحدد أو تعديل السجل التجاري دون موافقة الرئيس يُعد مخالفة صريحة للتعليمات.'
+          )}
+        </div>
+      `;
+    }
+
+    function renderFinalReport() {
+      const isAr = currentLang === 'ar';
+      const result = evaluateCompliance();
+
+      let bannerClasses = 'bg-emerald-50 border-emerald-300 text-emerald-950';
+      let pillClasses = 'bg-emerald-600 text-white';
+      let icon = '✅';
+
+      if (result.status === 'EXEMPT') {
+        bannerClasses = 'bg-blue-50 border-blue-300 text-blue-950';
+        pillClasses = 'bg-blue-700 text-white';
+        icon = '🛡️';
+      } else if (result.status === 'PARTIAL') {
+        bannerClasses = 'bg-amber-50 border-amber-300 text-amber-950';
+        pillClasses = 'bg-amber-600 text-white';
+        icon = '⚠️';
+      } else if (result.status === 'NON_COMPLIANT') {
+        bannerClasses = 'bg-rose-50 border-rose-300 text-rose-950';
+        pillClasses = 'bg-rose-600 text-white';
+        icon = '🚫';
+      }
+
+      const timestamp = new Date().toLocaleDateString(isAr ? 'ar-JO' : 'en-GB', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      let html = `
+        <div class="space-y-6">
+          <!-- Report Top Bar -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-navy-700">
+                ${isAr ? 'تقرير تقييم الامتثال التنظيمي' : 'Regulatory Compliance Assessment Report'}
+              </span>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">
+                ${isAr ? 'النتيجة النهائية لتعليمات الطائرات المسيرة (2025)' : 'CARC 2025 Drone Instructions Diagnostic'}
+              </h2>
+              <p class="text-xs text-slate-500 mt-0.5">${isAr ? 'تاريخ التقييم:' : 'Assessment Date:'} ${timestamp}</p>
+            </div>
+
+            <div class="flex items-center gap-2 no-print">
+              <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-navy-900 hover:bg-navy-800 text-white text-xs sm:text-sm font-semibold shadow-xs transition cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 6 2 18 2 18 9" />
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                  <rect x="6" y="14" width="12" height="8" />
+                </svg>
+                <span>${isAr ? 'طباعة / حفظ PDF' : 'Print / Save PDF'}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Overall Status Banner -->
+          <div class="p-5 sm:p-6 rounded-2xl border-2 ${bannerClasses}">
+            <div class="flex flex-wrap items-center gap-2.5 mb-2.5">
+              <span class="text-xl">${icon}</span>
+              <span class="px-3 py-1 rounded-full text-xs font-extrabold tracking-wide uppercase ${pillClasses}">
+                ${isAr ? result.badgeAr : result.badgeEn}
+              </span>
+            </div>
+            <p class="text-sm sm:text-base font-semibold leading-relaxed">
+              ${isAr ? result.summaryAr : result.summaryEn}
+            </p>
+            <div class="mt-4 pt-3 border-t border-current/15 flex flex-wrap gap-4 text-xs font-bold">
+              <span>${isAr ? `المتطلبات المستوفاة: ${result.met.length}` : `Met Requirements: ${result.met.length}`}</span>
+              <span>${isAr ? `المتطلبات غير المستوفاة: ${result.unmet.length}` : `Unmet Requirements: ${result.unmet.length}`}</span>
+            </div>
+          </div>
+      `;
+
+      // Unmet Requirements Section (Priority Action Items)
+      if (result.unmet.length > 0) {
+        html += `
+          <div class="space-y-3">
+            <h3 class="text-base font-extrabold text-rose-800 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center text-xs font-bold">✕</span>
+              <span>${isAr ? 'المتطلبات غير المستوفاة وإجراءات التصحيح المطلوبة' : 'Unmet Requirements & Mandatory Action Items'}</span>
+            </h3>
+            <div class="space-y-3">
+              ${result.unmet.map(item => `
+                <div class="p-4 rounded-xl border border-rose-200 bg-rose-50/60">
+                  <div class="flex items-center justify-between gap-2 mb-1">
+                    <span class="text-sm font-bold text-rose-950">${item.title}</span>
+                    <span class="px-2 py-0.5 rounded-md bg-rose-200/80 text-rose-900 text-[11px] font-bold shrink-0">${item.article}</span>
+                  </div>
+                  <p class="text-xs sm:text-sm text-rose-900/90 leading-relaxed">${item.detail}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Met Requirements Section
+      if (result.met.length > 0) {
+        html += `
+          <div class="space-y-3">
+            <h3 class="text-base font-extrabold text-emerald-800 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">✓</span>
+              <span>${isAr ? 'المتطلبات المستوفاة' : 'Verified / Met Regulatory Requirements'}</span>
+            </h3>
+            <div class="space-y-2.5">
+              ${result.met.map(item => `
+                <div class="p-4 rounded-xl border border-emerald-200 bg-emerald-50/40">
+                  <div class="flex items-center justify-between gap-2 mb-1">
+                    <span class="text-sm font-bold text-emerald-950">${item.title}</span>
+                    <span class="px-2 py-0.5 rounded-md bg-emerald-200/70 text-emerald-900 text-[11px] font-bold shrink-0">${item.article}</span>
+                  </div>
+                  <p class="text-xs sm:text-sm text-emerald-900/90 leading-relaxed">${item.detail}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Statutory Warnings & Ongoing Obligations (Articles 6, 7, 8, 9, 12)
+      if (result.warnings.length > 0) {
+        html += `
+          <div class="p-4 sm:p-5 rounded-2xl bg-slate-900 text-slate-100 space-y-2.5">
+            <h4 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-400">
+              ${isAr ? 'تنبيهات قانونية وتشغيلية مستمرة (المواد 6–12)' : 'Ongoing Statutory Obligations & Enforcement Triggers (Articles 6–12)'}
+            </h4>
+            <ul class="space-y-2 text-xs sm:text-sm text-slate-200 list-disc list-inside leading-relaxed">
+              ${result.warnings.map(w => `<li>${w}</li>`).join('')}
+            </ul>
+            <div class="pt-2 border-t border-slate-700 text-xs text-slate-400">
+              ${isAr
+                ? 'المادة (12): تُقدّم الطلبات وتُمنح الموافقات إلكترونياً عبر بوابة هيئة تنظيم الطيران المدني، وتُسدد الرسوم والغرامات عبر قنوات الدفع الإلكتروني المعتمدة.'
+                : 'Article 12: Formal applications and approvals are processed electronically via CARC’s e-services portal, with fees and fines collected via approved e-payment channels.'}
+            </div>
+          </div>
+        `;
+      }
+
+      html += `</div>`;
+      return html;
+    }
+
+    function renderStepper() {
+      const dict = I18N[currentLang];
+      const grid = document.getElementById('stepperGrid');
+      const stepCounter = document.getElementById('stepCounterLabel');
+      const stepHeading = document.getElementById('stepMainHeading');
+      const liveBadge = document.getElementById('liveStatusBadge');
+
+      if (currentStep <= 5) {
+        stepCounter.textContent = currentLang === 'en' ? `Step ${currentStep} of 5` : `الخطوة ${currentStep} من 5`;
+        stepHeading.textContent = dict.steps[currentStep - 1].title;
+      } else {
+        stepCounter.textContent = currentLang === 'en' ? 'Final Assessment Complete' : 'اكتمل التقييم النهائي';
+        stepHeading.textContent = currentLang === 'en' ? 'CARC Regulatory Compliance Report' : 'تقرير الامتثال التنظيمي لهيئة تنظيم الطيران المدني';
+      }
+
+      // Update Live Status Pill
+      const hasHardBlocker =
+        state.isRegisteredCompany === 'no' ||
+        state.securityClearancesAll4 === 'no' ||
+        state.aviationSecManager === 'no' ||
+        state.staffGoodConduct === 'no' ||
+        state.suitablePremises === 'no' ||
+        state.financialCoverageType === 'none' ||
+        state.insuranceDraftApproved === 'no' ||
+        state.priorImportTechApproval === 'no' ||
+        state.utmAndRegNumber === 'no' ||
+        state.missionFormAndEscort === 'no';
+
+      if (state.isExemptEntity === 'yes') {
+        liveBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200';
+        liveBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-blue-600"></span><span>${dict.statusExemptReady}</span>`;
+      } else if (hasHardBlocker) {
+        liveBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800 border border-rose-200';
+        liveBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-600"></span><span>${dict.statusBlockersFound}</span>`;
+      } else if (currentStep > 1) {
+        liveBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200';
+        liveBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-600"></span><span>${dict.statusOnTrack}</span>`;
+      } else {
+        liveBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200';
+        liveBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-400"></span><span>${dict.statusInProgress}</span>`;
+      }
+
+      // Render 5 step pills
+      grid.innerHTML = dict.steps.map((s, idx) => {
+        const num = idx + 1;
+        const isActive = currentStep === num;
+        const isDone = currentStep > num;
+        let cls = 'bg-slate-100 text-slate-500 border-slate-200';
+        if (isActive) cls = 'bg-navy-900 text-white border-navy-900 shadow-xs';
+        else if (isDone) cls = 'bg-emerald-50 text-emerald-800 border-emerald-300';
+
+        return `
+          <button type="button" onclick="jumpToStep(${num})"
+            class="px-2 py-2 rounded-xl border text-[11px] sm:text-xs font-bold truncate text-center transition cursor-pointer ${cls}">
+            ${isDone ? '✓ ' : ''}${s.short}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderSidebarLegalContext() {
+      const isAr = currentLang === 'ar';
+      const box = document.getElementById('stepLegalContext');
+
+      const contexts = {
+        1: isAr
+          ? `<p><strong>المادة (2):</strong> حصرت صفة "طالب الترخيص" بالشركات والمؤسسات المسجلة لدى وزارة الصناعة والتجارة.</p>
+             <p><strong>المادة (6/د):</strong> نظمت الإدخال المؤقت للتصوير عبر المعابر الحدودية بموافقة اللجنة وإشراف الإعلام العسكري أو الأمن العام.</p>
+             <p><strong>المادة (13):</strong> استثنت القوات المسلحة والأجهزة الأمنية والشركات المملوكة لها بالكامل مع التقيد بقواعد المجال الجوي المراقب.</p>`
+          : `<p><strong>Article 2:</strong> Restricts "License Applicant" strictly to companies/establishments registered with the Ministry of Industry, Trade and Supply (MIT).</p>
+             <p><strong>Article 6/D:</strong> Governs temporary border entry for filming under Special Committee approval and Military Media/PSD custody.</p>
+             <p><strong>Article 13:</strong> Exempts JAF, security agencies, and wholly-owned entities, subject to Controlled Airspace rules.</p>`,
+        2: isAr
+          ? `<p><strong>المادة (4/ب/2):</strong> تصدر الموافقات الأمنية والترخيص لممارسة غايات محددة حصراً (التصوير، المسح الجغرافي، الزراعة، التفتيش، التصنيع، التجارة، الصيانة، التدريب، وغيرها).</p>
+             <p><strong>المادة (4/ب/2/أ/5):</strong> يشترط الحصول على موافقة المركز الجغرافي الملكي لأعمال الخرائط والمسح الجغرافي.</p>`
+          : `<p><strong>Article 4/B/2:</strong> Security clearances and licenses are issued strictly for enumerated operational, commercial, industrial, or research purposes.</p>
+             <p><strong>Article 4/B/2/A/5:</strong> Mapping and geographic surveying requires explicit Royal Jordanian Geographic Centre (RJGC) approval.</p>`,
+        3: isAr
+          ? `<p><strong>المادة (4/أ و ب/1):</strong> تتولى الهيئة عبر وزارة الداخلية استصدار الموافقات الأمنية من (الداخلية، القوات المسلحة، المخابرات العامة، الأمن العام) لجميع العاملين والمقرات.</p>
+             <p><strong>المادة (5/أ/3 و 4):</strong> إلزامية تعيين مدير/مشرف أمن طيران مرخص ومتفرغ، وحسن السيرة والسلوك لكافة الموظفين.</p>`
+          : `<p><strong>Articles 4/A & 4/B/1:</strong> CARC secures clearances via MOI from MOI, JAF, GID, and PSD covering all staff and premises.</p>
+             <p><strong>Articles 5/A/3–4:</strong> Requires a full-time CARC-licensed Aviation Security Manager and clean background vetting for all employees.</p>`,
+        4: isAr
+          ? `<p><strong>المادة (5/أ/5):</strong> يشترط مقر مستقل ومناسب حاصل على الموافقة الفنية بموجب تعليمات الطيران المدني الجزء (101 و 102).</p>
+             <p><strong>المادة (5/أ/2):</strong> كفالة مالية عدلية أو وثيقة تأمين وطنية (طرف ثالث ومشغل إلزامياً، وهيكل اختيارياً) بعد موافقة الهيئة الخطية المسبقة على المسودة.</p>`
+          : `<p><strong>Article 5/A/5:</strong> Requires independent premises compliant with JCAR Parts 101 & 102.</p>
+             <p><strong>Article 5/A/2:</strong> Notarized judicial bond OR CBJ-licensed national insurance policy (mandatory Third-Party & Crew coverage) with prior written CARC approval of the draft policy.</p>`,
+        5: isAr
+          ? `<p><strong>المادة (5/أ/7 و 5/ب):</strong> حظر استيراد أو إدخال الطائرات أو قطع الغيار قبل موافقة اللجنة الفنية.</p>
+             <p><strong>المادة (5/ج و د):</strong> إلزامية التتبع الإلكتروني والسياج الجغرافي والربط مع نظام (UTM) وتثبيت رقم التسجيل.</p>
+             <p><strong>المادة (10):</strong> تعبئة نموذج مهمات الطيران والالتزام بالرفقة الأمنية ومراجعة التسجيلات قرب المواقع الحساسة.</p>`
+          : `<p><strong>Articles 5/A/7 & 5/B:</strong> Prior Committee technical and import approval required before bringing drones or spare parts into Jordan.</p>
+             <p><strong>Articles 5/C–D:</strong> Mandatory Electronic ID/Geofencing integrated with RJAF/CARC UTM and affixed registration number.</p>
+             <p><strong>Article 10:</strong> Mandatory flight mission forms, Military Media/PSD escort agreement, and footage review near sensitive sites.</p>`,
+        6: isAr
+          ? `<p><strong>المادة (5/و):</strong> تصدر الهيئة الرخصة بعد تنسيب اللجنة الخاصة بالموافقة إلى رئيس مجلس مفوضي الهيئة.</p>
+             <p><strong>المادة (12):</strong> تُقبل الطلبات وتُمنح الموافقات إلكترونياً وتُحصّل الرسوم عبر قنوات الدفع الإلكتروني.</p>`
+          : `<p><strong>Article 5/F:</strong> CARC issues the license following the Special Committee's recommendation to the Chairman of the Board of Commissioners.</p>
+             <p><strong>Article 12:</strong> Electronic portals and e-payment channels are used for applications, approvals, and fees.</p>`
+      };
+
+      box.innerHTML = contexts[currentStep] || contexts[1];
+    }
+
+    function renderReferenceDrawer() {
+      const isAr = currentLang === 'ar';
+      const container = document.getElementById('drawerContent');
+      container.innerHTML = ARTICLES_REFERENCE.map(art => `
+        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50/70 space-y-1.5">
+          <div class="text-xs font-extrabold text-amber-700">${art.num}</div>
+          <h4 class="text-sm font-bold text-slate-900">${isAr ? art.arTitle : art.enTitle}</h4>
+          <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">${isAr ? art.ar : art.en}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderApp() {
+      renderStepper();
+      renderSidebarLegalContext();
+
+      const container = document.getElementById('wizardContainer');
+      const btnPrev = document.getElementById('btnPrev');
+      const btnNext = document.getElementById('btnNext');
+      const nextBtnText = document.getElementById('nextBtnText');
+      const dict = I18N[currentLang];
+
+      // Trigger subtle fade animation
+      container.classList.remove('step-transition');
+      void container.offsetWidth;
+      container.classList.add('step-transition');
+
+      if (currentStep === 1) container.innerHTML = renderStep1();
+      else if (currentStep === 2) container.innerHTML = renderStep2();
+      else if (currentStep === 3) container.innerHTML = renderStep3();
+      else if (currentStep === 4) container.innerHTML = renderStep4();
+      else if (currentStep === 5) container.innerHTML = renderStep5();
+      else container.innerHTML = renderFinalReport();
+
+      // Footer Buttons state
+      btnPrev.disabled = currentStep === 1;
+      if (currentStep === 6) {
+        btnNext.classList.add('hidden');
+      } else {
+        btnNext.classList.remove('hidden');
+        const isLastBeforeReport =
+          currentStep === 5 ||
+          (currentStep === 1 && (state.isExemptEntity === 'yes' || state.isTemporaryFilming === 'yes'));
+        nextBtnText.textContent = isLastBeforeReport ? dict.btnFinish : dict.btnNext;
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      applyStaticTranslations();
+      renderApp();
+    });
+  </script>
+</body>
+</html>
